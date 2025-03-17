@@ -7,10 +7,20 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: {
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  }: let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {inherit system;};
+  in {
     homeConfigurations."claudio" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = { inherit nixpkgs; };
+      inherit pkgs;
+      home-manager.useGlobalPkgs = true;
+      home-manager.useUserPackages = true;
+      extraSpecialArgs = {inherit nixpkgs;};
       modules = [
         ./home-manager.nix
         {
@@ -22,4 +32,3 @@
     };
   };
 }
-
