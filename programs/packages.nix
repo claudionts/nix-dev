@@ -9,5 +9,6 @@
     ripgrep
     teams-for-linux
     fd
+    docker
   ];
 }
