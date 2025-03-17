@@ -1,6 +1,6 @@
 { ... }: {
   programs.tmux = {
-    enable = true;
+    enable = false;
     extraConfig = ''
       set-option -g focus-events on
       set-option -a terminal-features 'rio:RGB'
