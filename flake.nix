@@ -1,4 +1,3 @@
-
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -14,7 +13,7 @@
       homeConfigurations.claudio = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = { inherit inputs; };
-        modules = [ ./nix-dev/home-manager.nix ];
+        modules = [ ./home-manager.nix ];
       };
     };
 }
