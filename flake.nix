@@ -1,4 +1,3 @@
-
 {
   description = "Ambiente pessoal do Claudio com Nix Flakes e Home Manager";
 
@@ -11,12 +10,8 @@
   outputs = { self, nixpkgs, home-manager, ... }: let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
-  in {
-    homeConfigurations."claudio" = home-manager.lib.homeManagerConfiguration {
-      pkgs = pkgs;  # Passando o pkgs para a configuração
-      home-manager.useGlobalPkgs = true;
-      home-manager.useUserPackages = true;
-      extraSpecialArgs = { inherit nixpkgs; };
+    homeConfig = home-manager.lib.homeManagerConfiguration {
+      pkgs = pkgs;
       modules = [
         ./home-manager.nix
         {
@@ -26,6 +21,11 @@
         }
       ];
     };
+  in {
+    # Criando a configuração do home manager para o usuário
+    homeConfigurations.claudio = homeConfig;
+
+    # Garantir que o flake exporte a configuração correta como um pacote/derivado
+    defaultPackage.x86_64-linux = homeConfig.activationPackage;
   };
 }
-
