@@ -17,7 +17,6 @@
     pkgs = import nixpkgs {inherit system;};
   in {
     homeConfigurations."claudio" = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
       extraSpecialArgs = {inherit nixpkgs;};
