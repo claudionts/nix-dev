@@ -8,6 +8,9 @@
 
       set-window-option -g mode-keys vi
 
+      bind C-c run "tmux save-buffer - | xclip -i -sel clip"
+      bind C-v run "tmux set-buffer $(xclip -o -sel clip); tmux paste-buffer"
+
       bind h select-pane -L
       bind j select-pane -D
       bind k select-pane -U
