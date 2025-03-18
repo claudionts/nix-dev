@@ -13,6 +13,7 @@
     tmux
     xclip
     gcc
+    nvim
     asdf
   ];
 }
