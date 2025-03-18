@@ -6,7 +6,6 @@
   imports = [
     ./home.nix
     ./programs/fish.nix
-    ./programs/neovim.nix
     ./programs/git.nix
     ./programs/tmux.nix
     ./programs/packages.nix
