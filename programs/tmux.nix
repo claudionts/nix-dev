@@ -16,9 +16,6 @@
       bind k select-pane -U
       bind l select-pane -R
 
-      set -g @plugin 'erikw/tmux-powerline'
-
-
       set-window-option -g mode-keys vi
       bind-key -T copy-mode-vi v send-keys -X begin-selection
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle

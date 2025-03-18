@@ -10,5 +10,7 @@
     teams-for-linux
     fd
     docker
+    tmux
+    xclip
   ];
 }
