@@ -17,5 +17,6 @@
     gopls
     go
     elixir-ls
+    luajitPackages.luarocks
   ];
 }
