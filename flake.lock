@@ -38,6 +38,7 @@
     },
     "root": {
       "inputs": {
+        "asdf-vm": "asdf-vm",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }

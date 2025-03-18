@@ -14,7 +14,7 @@
     xclip
     gcc
     neovim
-    asdf
+    asdf-vm
     gopls
     go
     elixir-ls
