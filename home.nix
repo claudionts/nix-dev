@@ -4,7 +4,7 @@
   home.file.".local/share/applications/teams.desktop".text = ''
     [Desktop Entry]
     Name=Microsoft Teams
-    Exec=teams-for-linux
+    Exec=env ELECTRON_DISABLE_SANDBOX=1 teams-for-linux
     Icon=$HOME/.local/share/icons/teams.png
     Type=Application
     Categories=Network;InstantMessaging;
