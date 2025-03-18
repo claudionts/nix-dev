@@ -3,12 +3,7 @@
     enable = true;
   };
 
-  # Adicionar Docker à lista de pacotes do sistema
-  environment.systemPackages = with pkgs; [
-    docker
-  ];
-
-  # (Opcional) Configurar o serviço systemd para Docker
+  # Configurar o serviço systemd para o Docker
   systemd.services.docker = {
     enable = true;
     description = "Docker Daemon";
@@ -19,6 +14,7 @@
       ExecReload = "${pkgs.docker}/bin/docker reload";
     };
   };
+
   home.file.".local/share/icons/teams.png".source = ./icons/teams.png;
 
   home.file.".local/share/applications/teams.desktop".text = ''
