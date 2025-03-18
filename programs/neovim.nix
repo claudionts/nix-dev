@@ -26,6 +26,7 @@
       g.markdown_fenced_languages = {
           "python", "elixir", "bash", "dockerfile", 'sh=bash'
       }
+    "ignore config file"
     '';
   };
 }
