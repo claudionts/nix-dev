@@ -1,9 +1,9 @@
 {pkgs, ...}: {
-  programs.docker = {
-    enable = true;
-  };
+  environment.systemPackages = with pkgs; [
+    docker
+  ];
 
-  # Configurar o serviço systemd para o Docker
+  # Configurar o serviço Docker via systemd
   systemd.services.docker = {
     enable = true;
     description = "Docker Daemon";
@@ -13,9 +13,7 @@
       Restart = "always";
       ExecReload = "${pkgs.docker}/bin/docker reload";
     };
-  };
-
-  home.file.".local/share/icons/teams.png".source = ./icons/teams.png;
+  };  home.file.".local/share/icons/teams.png".source = ./icons/teams.png;
 
   home.file.".local/share/applications/teams.desktop".text = ''
     [Desktop Entry]
