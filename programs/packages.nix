@@ -19,5 +19,14 @@
     go
     elixir-ls
   ];
-  programs.docker.enable = true;
+  systemd.services.docker = {
+    enable = true;
+    description = "Docker Daemon";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.docker}/bin/dockerd";
+      Restart = "always";
+      ExecReload = "${pkgs.docker}/bin/docker reload";
+    };
+  };
 }
