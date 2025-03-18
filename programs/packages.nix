@@ -18,5 +18,6 @@
     go
     elixir-ls
     luajitPackages.luarocks
+    docker
   ];
 }
