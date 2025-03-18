@@ -19,6 +19,6 @@
     elixir-ls
     luajitPackages.luarocks
     docker
-    lua51
+    lua
   ];
 }
