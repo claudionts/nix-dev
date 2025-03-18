@@ -19,4 +19,5 @@
     go
     elixir-ls
   ];
+  programs.docker.enable = true;
 }
