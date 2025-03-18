@@ -16,6 +16,7 @@
     neovim
     asdf
     gopls
+    go
     elixir-ls
   ];
 }
