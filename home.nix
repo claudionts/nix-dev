@@ -13,7 +13,9 @@
       Restart = "always";
       ExecReload = "${pkgs.docker}/bin/docker reload";
     };
-  };  home.file.".local/share/icons/teams.png".source = ./icons/teams.png;
+  };
+
+  home.file.".local/share/icons/teams.png".source = ./icons/teams.png;
 
   home.file.".local/share/applications/teams.desktop".text = ''
     [Desktop Entry]
