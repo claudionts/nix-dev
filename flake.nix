@@ -5,6 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    asdf-vm.url = "github:asdf-vm/asdf";
+    asdf-vm.flake = false;
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: let
