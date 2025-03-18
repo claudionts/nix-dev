@@ -21,4 +21,8 @@
     docker
     lua
   ];
+
+  home.sessionVariables = {
+    ELECTRON_DISABLE_SANDBOX = "1";
+  };
 }
