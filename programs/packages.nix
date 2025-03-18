@@ -12,5 +12,7 @@
     docker
     tmux
     xclip
+    gcc
+    asdf
   ];
 }
