@@ -23,6 +23,7 @@
         echo "Instalando Oh My Fish..."
         curl -L https://get.oh-my.fish | fish
       end
+      alias teams-for-linux="ELECTRON_DISABLE_SANDBOX=1 teams-for-linux"
     '';
   };
 }
