@@ -20,5 +20,6 @@
     luajitPackages.luarocks
     docker
     lua
+    lazygit
   ];
 }
