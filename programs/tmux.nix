@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   programs.tmux = {
     enable = true;
     extraConfig = ''
@@ -21,7 +21,7 @@
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
       bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
 
-      bind-key -r -T prefix       C-k              resize-pane -U 2 
+      bind-key -r -T prefix       C-k              resize-pane -U 2
       bind-key -r -T prefix       C-j            resize-pane -D 2
       bind-key -r -T prefix       C-h            resize-pane -L 2
       bind-key -r -T prefix       C-l           resize-pane -R 2

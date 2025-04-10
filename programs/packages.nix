@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     fish
     curl
@@ -21,5 +21,12 @@
     docker
     lua
     lazygit
+    alejandra
+    autoconf
+    automake
+    libevent
+    pkg-config
+    sqlite
+    czmq
   ];
 }
