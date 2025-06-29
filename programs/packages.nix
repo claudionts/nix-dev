@@ -28,5 +28,10 @@
     pkg-config
     sqlite
     czmq
+    gnumake
+    ruby
+    libxml2.dev
+    libxslt.dev
+    zlib.dev
   ];
-}
+ }
