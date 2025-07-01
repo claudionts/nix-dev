@@ -16,6 +16,8 @@
     asdf-vm
     gopls
     go
+    erlang
+    elixir
     elixir-ls
     luajitPackages.luarocks
     docker
