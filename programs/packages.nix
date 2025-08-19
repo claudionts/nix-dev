@@ -20,7 +20,6 @@
     elixir
     elixir-ls
     luajitPackages.luarocks
-    docker
     lua
     lazygit
     alejandra
