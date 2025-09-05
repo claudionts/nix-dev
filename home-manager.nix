@@ -9,7 +9,6 @@
     ./programs/git.nix
     ./programs/tmux.nix
     ./programs/packages.nix
-    ./programs/nvm.nix  # Restaurando o arquivo nvm.nix (agora para ASDF)
   ];
 
   home.sessionVariables = {

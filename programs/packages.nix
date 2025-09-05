@@ -13,7 +13,7 @@
     xclip
     gcc
     neovim
-    asdf-vm  # Restaurando o ASDF
+    asdf-vm
     gopls
     go
     erlang
