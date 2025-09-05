@@ -3,10 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    asdf-vm.url = "github:asdf-vm/asdf";
-    asdf-vm.flake = false;
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -16,23 +16,20 @@
     ...
   }: let
     system = "x86_64-linux";
-    pkgs = import nixpkgs {inherit system;};
-    homeConfig = home-manager.lib.homeManagerConfiguration {
-      pkgs = pkgs;
-      modules = [
-        ./home-manager.nix
-        {
-          home.username = "claudio";
-          home.homeDirectory = "/home/claudio";
-          home.stateVersion = "23.11";
-        }
-      ];
-    };
+    pkgs = nixpkgs.legacyPackages.${system};
   in {
-    # Criando a configuração do home manager para o usuário
-    homeConfigurations.claudio = homeConfig;
-
-    # Garantir que o flake exporte a configuração correta como um pacote/derivado
-    defaultPackage.x86_64-linux = homeConfig.activationPackage;
+    homeConfigurations = {
+      claudio = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          ./home-manager.nix
+          {
+            home.username = "claudio";
+            home.homeDirectory = "/home/claudio";
+            home.stateVersion = "24.05";
+          }
+        ];
+      };
+    };
   };
 }
