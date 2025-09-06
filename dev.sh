@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Script helper para desenvolvimento local do projeto Nix
+# Helper script for local development of the Nix project
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,45 +10,91 @@ cd "$PROJECT_ROOT"
 
 usage() {
     cat << EOF
-Uso: $0 <comando>
+Usage: $0 <command>
 
-Comandos disponíveis:
-    format      - Formata o código Nix com alejandra
-    build       - Builda a configuração
-    apply       - Aplica a configuração (home-manager switch)
-    check       - Executa formatação + build (como o CI)
+Available commands:
+    format      - Format Nix code with alejandra
+    build       - Build the configuration
+    apply       - Apply the configuration (home-manager switch)
+    check       - Execute all CI checks locally
+    validate    - Validate flake structure
+    deadnix     - Check for dead code
+    dry-run     - Test activation without applying changes
 
 EOF
 }
 
 format() {
-    echo "🎨 Formatando código Nix..."
+    echo "Formatting Nix code..."
     nix run nixpkgs#alejandra -- .
-    echo "✅ Formatação concluída!"
+    echo "Formatting completed!"
+}
+
+check_format() {
+    echo "Checking code formatting..."
+    nix run nixpkgs#alejandra -- --check .
+    echo "Formatting is correct!"
+}
+
+validate_flake() {
+    echo "Validating flake structure..."
+    nix flake check --impure
+    echo "Flake structure is valid!"
+}
+
+check_deadnix() {
+    echo "Checking for dead code..."
+    nix run nixpkgs#deadnix -- --fail .
+    echo "No dead code found!"
 }
 
 build() {
-    echo "🏗️  Buildando configuração..."
+    echo "Building configuration..."
     nix build .#homeConfigurations.claudio.activationPackage --impure
-    echo "✅ Build concluído com sucesso!"
+    echo "Build completed successfully!"
+}
+
+dry_run() {
+    echo "Testing activation (dry-run)..."
+    if [ ! -d "result" ]; then
+        echo "Error: 'result' directory not found. Run 'build' first."
+        return 1
+    fi
+    result/activate --dry-run
+    echo "Dry-run activation test successful!"
 }
 
 apply() {
-    echo "🚀 Aplicando configuração..."
+    echo "Applying configuration..."
     nix run nixpkgs#home-manager -- switch --flake . --impure
-    echo "✅ Configuração aplicada com sucesso!"
+    echo "Configuration applied successfully!"
 }
 
 check() {
-    echo " Executando verificações (como CI)..."
+    echo "Running all CI checks locally..."
     
-    echo "🎨 Verificando formatação..."
-    nix run nixpkgs#alejandra -- --check .
+    echo ""
+    echo "=== Step 1: Checking code formatting ==="
+    check_format
     
-    echo "🏗️  Testando build..."
+    echo ""
+    echo "=== Step 2: Validating flake structure ==="
+    validate_flake
+    
+    echo ""
+    echo "=== Step 3: Checking for dead code ==="
+    check_deadnix
+    
+    echo ""
+    echo "=== Step 4: Building configuration ==="
     build
     
-    echo "✅ Todas as verificações passaram!"
+    echo ""
+    echo "=== Step 5: Testing activation (dry-run) ==="
+    dry_run
+    
+    echo ""
+    echo "All CI checks passed successfully!"
 }
 
 if [[ $# -eq 0 ]]; then
@@ -57,9 +103,12 @@ if [[ $# -eq 0 ]]; then
 fi
 
 case "$1" in
-    format)  format ;;
-    build)   build ;;
-    apply)   apply ;;
-    check)   check ;;
-    *)       usage; exit 1 ;;
+    format)    format ;;
+    build)     build ;;
+    apply)     apply ;;
+    check)     check ;;
+    validate)  validate_flake ;;
+    deadnix)   check_deadnix ;;
+    dry-run)   dry_run ;;
+    *)         usage; exit 1 ;;
 esac
