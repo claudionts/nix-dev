@@ -1,4 +1,4 @@
-{...}: {
+_: {
   home.file.".local/share/icons/teams.png".source = ./icons/teams.png;
 
   home.file.".local/share/applications/teams.desktop".text = ''
