@@ -23,9 +23,11 @@
         modules = [
           ./home-manager.nix
           {
-            home.username = "claudio";
-            home.homeDirectory = "/home/claudio";
-            home.stateVersion = "24.05";
+            home = {
+              username = "claudio";
+              homeDirectory = "/home/claudio";
+              stateVersion = "24.05";
+            };
           }
         ];
       };
