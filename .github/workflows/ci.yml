@@ -48,3 +48,7 @@ jobs:
     # This compiles all configurations and dependencies to ensure everything works
     - name: Build configuration
       run: nix build .#homeConfigurations.claudio.activationPackage --impure
+
+    # Checks the flake for common issues and best practices
+    - name: Flake checker
+      run: nix run "github:DeterminateSystems/flake-checker"
