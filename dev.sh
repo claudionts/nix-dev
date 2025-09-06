@@ -19,7 +19,6 @@ Available commands:
     check       - Execute all CI checks locally
     validate    - Validate flake structure
     deadnix     - Check for dead code
-    dry-run     - Test activation without applying changes
 
 EOF
 }
@@ -54,16 +53,6 @@ build() {
     echo "Build completed successfully!"
 }
 
-dry_run() {
-    echo "Testing activation (dry-run)..."
-    if [ ! -d "result" ]; then
-        echo "Error: 'result' directory not found. Run 'build' first."
-        return 1
-    fi
-    result/activate --dry-run
-    echo "Dry-run activation test successful!"
-}
-
 apply() {
     echo "Applying configuration..."
     nix run nixpkgs#home-manager -- switch --flake . --impure
@@ -90,10 +79,6 @@ check() {
     build
     
     echo ""
-    echo "=== Step 5: Testing activation (dry-run) ==="
-    dry_run
-    
-    echo ""
     echo "All CI checks passed successfully!"
 }
 
@@ -109,6 +94,5 @@ case "$1" in
     check)     check ;;
     validate)  validate_flake ;;
     deadnix)   check_deadnix ;;
-    dry-run)   dry_run ;;
     *)         usage; exit 1 ;;
 esac

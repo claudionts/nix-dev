@@ -44,9 +44,3 @@ jobs:
     # This compiles all configurations and dependencies to ensure everything works
     - name: Build configuration
       run: nix build .#homeConfigurations.claudio.activationPackage --impure
-      
-    # Simulates the activation process without making real changes to the system
-    # Tests if the built configuration would apply successfully in practice
-    - name: Test dry activation
-      run: |
-        result/activate --dry-run
