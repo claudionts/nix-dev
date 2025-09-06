@@ -25,6 +25,24 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
           
+    # Setup Cachix binary cache for faster builds
+    # Uses the public nix-community cache to avoid rebuilding common packages
+    - name: Setup Cachix
+      uses: cachix/cachix-action@v15
+      with:
+        name: nix-community
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        
+    # Cache Nix store to speed up subsequent builds
+    # Caches the /nix/store directory between CI runs
+    - name: Cache Nix store
+      uses: actions/cache@v4
+      with:
+        path: /nix
+        key: ${{ runner.os }}-nix-${{ hashFiles('flake.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-nix-
+          
     # Verifies that all Nix code follows consistent formatting rules
     # Uses alejandra formatter to ensure code style consistency across the project
     - name: Check code formatting
