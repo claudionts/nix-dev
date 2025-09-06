@@ -1,110 +1,110 @@
 # Nix Development Environment
 
-Configuração pessoal do ambiente de desenvolvimento usando Nix Flakes e Home Manager.
+Personal development environment configuration using Nix Flakes and Home Manager.
 
 [![CI](https://github.com/claudionts/nix-dev/actions/workflows/ci.yml/badge.svg)](https://github.com/claudionts/nix-dev/actions/workflows/ci.yml)
 
-## 🚀 Instalação Rápida
+## 🚀 Quick Installation
 
 ```bash
-# Clonar o repositório
+# Clone the repository
 git clone https://github.com/claudionts/nix-dev.git ~/.config/nix-dev
 
-# Navegar para o diretório
+# Navigate to the directory
 cd ~/.config/nix-dev
 
-# Aplicar a configuração
+# Apply the configuration
 nix run nixpkgs#home-manager -- switch --flake ~/.config/nix-dev --impure
 
-# Ou usar o script helper
+# Or use the helper script
 ./dev.sh apply
 ```
 
-## 📦 O que está incluído
+## 📦 What's Included
 
-- **Shell**: Fish com Starship prompt
-- **Ferramentas**: bat, eza, fzf, ripgrep, lazygit, etc.
-- **Desenvolvimento**: 
+- **Shell**: Fish with Starship prompt
+- **Tools**: bat, eza, fzf, ripgrep, lazygit, etc.
+- **Development**: 
   - Go + gopls
   - Erlang + Elixir + elixir-ls
-  - ASDF para gerenciar versões de linguagens
+  - ASDF for language version management
   - Ruby, Lua, autotools
 - **Editor**: Neovim
-- **Terminal**: tmux configurado
-- **Git**: configurações otimizadas
+- **Terminal**: tmux configured
+- **Git**: optimized configurations
 
-## 🛠️ Script de Desenvolvimento
+## 🛠️ Development Script
 
-O script `dev.sh` fornece comandos úteis para desenvolvimento:
+The `dev.sh` script provides useful commands for development:
 
 ```bash
-./dev.sh check    # Verifica flake e sintaxe
-./dev.sh build    # Builda a configuração
-./dev.sh apply    # Aplica a configuração
-./dev.sh format   # Formata código Nix
-./dev.sh update   # Atualiza dependências
-./dev.sh clean    # Limpa cache do Nix
-./dev.sh test     # Executa todos os testes
-./dev.sh ci       # Simula ambiente de CI
+./dev.sh check    # Check flake and syntax
+./dev.sh build    # Build the configuration
+./dev.sh apply    # Apply the configuration
+./dev.sh format   # Format Nix code
+./dev.sh update   # Update dependencies
+./dev.sh clean    # Clean Nix cache
+./dev.sh test     # Run all tests
+./dev.sh ci       # Simulate CI environment
 ```
 
-## 🔄 Integração Contínua
+## 🔄 Continuous Integration
 
-O projeto usa GitHub Actions para:
+The project uses GitHub Actions for:
 
-- ✅ Verificar validade do flake
-- 🏗️ Testar build da configuração
-- 🎨 Verificar formatação do código
-- 🧪 Testar em múltiplas versões do NixOS
-- 📦 Atualizar dependências automaticamente (Renovate)
+- ✅ Check flake validity
+- 🏗️ Test configuration build
+- 🎨 Check code formatting
+- 🧪 Test on multiple NixOS versions
+- 📦 Automatically update dependencies (Renovate)
 
-## 📂 Estrutura do Projeto
+## 📂 Project Structure
 
 ```
 .
-├── flake.nix              # Configuração principal do flake
-├── home-manager.nix       # Imports e configurações globais
-├── home.nix              # Arquivos específicos do usuário
-├── programs/             # Configurações por ferramenta
-│   ├── fish.nix          # Shell Fish
+├── flake.nix              # Main flake configuration
+├── home-manager.nix       # Imports and global configurations
+├── home.nix              # User-specific files
+├── programs/             # Configurations per tool
+│   ├── fish.nix          # Fish shell
 │   ├── git.nix           # Git
 │   ├── tmux.nix          # Terminal multiplexer
-│   └── packages.nix      # Lista de pacotes
+│   └── packages.nix      # Package list
 ├── .github/              # CI/CD
 │   └── workflows/
 │       └── ci.yml        # GitHub Actions
-└── dev.sh               # Script helper de desenvolvimento
+└── dev.sh               # Development helper script
 ```
 
-## 🔧 Personalização
+## 🔧 Customization
 
-1. **Adicionar novos pacotes**: Edite `programs/packages.nix`
-2. **Configurar ferramentas**: Adicione arquivos em `programs/`
-3. **Modificar usuário**: Ajuste `flake.nix` e `home-manager.nix`
+1. **Add new packages**: Edit `programs/packages.nix`
+2. **Configure tools**: Add files in `programs/`
+3. **Modify user**: Adjust `flake.nix` and `home-manager.nix`
 
-## 🐛 Solução de Problemas
+## 🐛 Troubleshooting
 
 ```bash
-# Verificar problemas no flake
+# Check flake issues
 nix flake check --show-trace
 
-# Limpar cache em caso de problemas
+# Clean cache in case of problems
 nix-collect-garbage -d
 
-# Verificar logs detalhados
+# Check detailed logs
 ./dev.sh ci
 ```
 
-## 📋 Comandos Úteis
+## 📋 Useful Commands
 
 ```bash
-# Atualizar apenas uma entrada específica
+# Update only a specific input
 nix flake lock --update-input nixpkgs
 
-# Ver o que mudou
+# See what changed
 nix store diff-closures /nix/var/nix/profiles/per-user/$USER/home-manager*
 
-# Reverter para geração anterior
+# Rollback to previous generation
 home-manager generations
 home-manager switch --switch-generation <ID>
 ```
