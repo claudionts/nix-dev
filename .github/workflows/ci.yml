@@ -8,112 +8,45 @@ on:
 
 jobs:
   check:
-    name: Check Nix Flake
+    name: Check & Build
     runs-on: ubuntu-latest
     
     steps:
+    # Downloads the repository code to the GitHub Actions runner
+    # This makes all project files available for the subsequent steps
     - name: Checkout code
       uses: actions/checkout@v4
       
+    # Installs the Nix package manager with flakes support enabled
+    # Required to run any nix commands and build the configuration
     - name: Install Nix
       uses: cachix/install-nix-action@v27
       with:
-        nix_path: nixpkgs=channel:nixos-unstable
         extra_nix_config: |
           experimental-features = nix-command flakes
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           
-    - name: Setup Cachix
-      uses: cachix/cachix-action@v15
-      with:
-        name: nix-community
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-        
-    - name: Check flake
+    # Verifies that all Nix code follows consistent formatting rules
+    # Uses alejandra formatter to ensure code style consistency across the project
+    - name: Check code formatting
+      run: nix run nixpkgs#alejandra -- --check .
+      
+    # Validates the overall flake structure and all defined outputs
+    # Ensures inputs are reachable and outputs are properly configured
+    - name: Validate flake structure
       run: nix flake check --impure
       
-    - name: Build home-manager configuration
-      run: |
-        nix build .#homeConfigurations.claudio.activationPackage --impure
-        
-    - name: Verify flake metadata
-      run: |
-        nix flake metadata
-        nix flake show
-        
-  format:
-    name: Check Nix Code Formatting
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    # Scans for unused variables, imports, and dead code in Nix files
+    # Helps maintain clean codebase by failing CI if unused code is found
+    - name: Remove dead code check  
+      run: nix run nixpkgs#deadnix -- --fail .
       
-    - name: Install Nix
-      uses: cachix/install-nix-action@v27
-      with:
-        nix_path: nixpkgs=channel:nixos-unstable
-        extra_nix_config: |
-          experimental-features = nix-command flakes
-          
-    - name: Check formatting with alejandra
-      run: |
-        nix run nixpkgs#alejandra -- --check .
-        
-  test-build-matrix:
-    name: Test Build on Multiple Systems
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        nixpkgs:
-          - "nixos-unstable"
-          - "nixos-24.05"
-          
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    # Builds the complete home-manager configuration into an activation package
+    # This compiles all configurations and dependencies to ensure everything works
+    - name: Build configuration
+      run: nix build .#homeConfigurations.claudio.activationPackage --impure
       
-    - name: Install Nix
-      uses: cachix/install-nix-action@v27
-      with:
-        nix_path: nixpkgs=channel:${{ matrix.nixpkgs }}
-        extra_nix_config: |
-          experimental-features = nix-command flakes
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          
-    - name: Setup Cachix
-      uses: cachix/cachix-action@v15
-      with:
-        name: nix-community
-        
-    - name: Test build with ${{ matrix.nixpkgs }}
+    # Simulates the activation process without making real changes to the system
+    # Tests if the built configuration would apply successfully in practice
+    - name: Test dry activation
       run: |
-        nix build .#homeConfigurations.claudio.activationPackage --impure --show-trace
-        
-  validate-configs:
-    name: Validate Individual Configs
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Install Nix
-      uses: cachix/install-nix-action@v27
-      with:
-        nix_path: nixpkgs=channel:nixos-unstable
-        extra_nix_config: |
-          experimental-features = nix-command flakes
-          
-    - name: Validate individual config files
-      run: |
-        echo "Validating Nix syntax..."
-        for file in $(find . -name "*.nix" -type f); do
-          echo "Checking $file"
-          nix-instantiate --parse "$file" > /dev/null
-        done
-        
-    - name: Test flake inputs update
-      run: |
-        nix flake update --commit-lock-file
-        nix build .#homeConfigurations.claudio.activationPackage --impure
+        result/activate --dry-run

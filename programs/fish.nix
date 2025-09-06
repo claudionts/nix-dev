@@ -1,5 +1,8 @@
-{ pkgs, lib, ... }:
 {
+  pkgs,
+  lib,
+  ...
+}: {
   programs.fish.enable = true;
 
   programs.fish.interactiveShellInit = ''
@@ -18,4 +21,3 @@
     gp = "git push";
   };
 }
-
