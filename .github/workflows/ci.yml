@@ -28,11 +28,8 @@ jobs:
     # Setup Cachix binary cache for faster builds
     # Uses the public nix-community cache to avoid rebuilding common packages
     - name: Setup Cachix
-      uses: cachix/cachix-action@v15
-      with:
-        name: nix-community
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-          
+      uses: DeterminateSystems/magic-nix-cache-action@main
+
     # Verifies that all Nix code follows consistent formatting rules
     # Uses alejandra formatter to ensure code style consistency across the project
     - name: Check code formatting
@@ -55,7 +52,7 @@ jobs:
     # Builds the complete home-manager configuration into an activation package
     # This compiles all configurations and dependencies to ensure everything works
     - name: Build configuration
-      run: nix build .#homeConfigurations.claudio.activationPackage --impure
+      run: nix build .#homeConfigurations.claudio.activationPackage
 
     # Checks the flake for common issues and best practices
     - name: Flake checker
