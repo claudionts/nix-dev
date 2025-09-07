@@ -53,4 +53,4 @@ jobs:
 
     # Checks the flake for common issues and best practices
     - name: Flake checker
-      run: DeterminateSystems/flake-checker-action@main
+      uses: DeterminateSystems/flake-checker-action@main
