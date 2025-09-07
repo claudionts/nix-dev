@@ -20,10 +20,7 @@ jobs:
     # Installs the Nix package manager with flakes support enabled
     # Required to run any nix commands and build the configuration
     - name: Install Nix
-      uses: cachix/install-nix-action@v27
-      with:
-        extra_nix_config: |
-          experimental-features = nix-command flakes
+      uses: DeterminateSystems/nix-installer-action@main
           
     # Setup Cachix binary cache for faster builds
     # Uses the public nix-community cache to avoid rebuilding common packages
@@ -56,4 +53,4 @@ jobs:
 
     # Checks the flake for common issues and best practices
     - name: Flake checker
-      run: nix run "github:DeterminateSystems/flake-checker"
+      run: DeterminateSystems/flake-checker-action@main
