@@ -28,6 +28,8 @@
 
     plugins = with pkgs.vimPlugins; [
       copilot-vim
+      vim-elixir
+      nvim-lspconfig
       {
         plugin = nvim-treesitter.withAllGrammars;
         type = "lua";
