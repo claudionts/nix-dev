@@ -12,7 +12,6 @@
     tmux
     xclip
     gcc
-    neovim
     asdf-vm
     gopls
     go

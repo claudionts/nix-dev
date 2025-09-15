@@ -23,6 +23,7 @@
         modules = [
           ./home-manager.nix
           {
+            nixpkgs.config.allowUnfree = true;
             home = {
               username = "claudio";
               homeDirectory = "/home/claudio";

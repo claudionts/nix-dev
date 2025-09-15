@@ -5,6 +5,7 @@
     ./programs/git.nix
     ./programs/tmux.nix
     ./programs/packages.nix
+    ./programs/neovim.nix
   ];
 
   home.sessionVariables = {
