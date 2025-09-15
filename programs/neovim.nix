@@ -48,6 +48,26 @@
           })
         '';
       }
+      nvim-lspconfig
+      {
+        plugin = nvim-lspconfig;
+        type = "lua";
+        config = ''
+          -- Configure Expert LSP for Elixir
+          -- Expert is already installed at ~/projects/expert/
+          
+          local expert_cmd = "/home/claudio/projects/expert/apps/expert/burrito_out/expert_linux_amd64"
+          
+          require('lspconfig').lexical.setup {
+            cmd = { expert_cmd },
+            root_dir = function(fname)
+              return require('lspconfig').util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+            end,
+            filetypes = { "elixir", "eelixir", "heex" },
+            settings = {}
+          }
+        '';
+      }
       vim-projectionist
 
       {
