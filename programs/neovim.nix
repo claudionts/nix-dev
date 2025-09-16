@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   programs.neovim = {
     enable = true;
-    extraPackages = with pkgs; [ curl ];
+    extraPackages = with pkgs; [curl];
     extraLuaConfig = ''
                vim.opt.number = true
 
@@ -58,9 +58,9 @@
         config = ''
           -- Configure Expert LSP for Elixir
           -- Expert is already installed at ~/projects/expert/
-          
+
           local expert_cmd = "/home/claudio/.local/bin/expert"
-          
+
           require('lspconfig').lexical.setup {
             cmd = { expert_cmd },
             root_dir = function(fname)
@@ -156,7 +156,7 @@
       }
 
       file-line
-      plenary-nvim  # Required dependency for CodeCompanion
+      plenary-nvim # Required dependency for CodeCompanion
       {
         plugin = codecompanion-nvim;
         type = "lua";
@@ -167,7 +167,7 @@
                 adapter = "copilot"
               },
               inline = {
-                adapter = "copilot"  
+                adapter = "copilot"
               }
             },
             display = {
@@ -177,7 +177,7 @@
               },
               chat = {
                 window = {
-                  layout = "vertical", 
+                  layout = "vertical",
                   width = 0.5,
                   height = 0.8,
                   relative = "editor"
@@ -185,7 +185,7 @@
               }
             }
           })
-          
+
           -- Keymaps
           vim.keymap.set("n", "<C-z>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
           vim.keymap.set("v", "<C-z>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
