@@ -59,7 +59,7 @@
           -- Configure Expert LSP for Elixir
           -- Expert is already installed at ~/projects/expert/
           
-          local expert_cmd = "/home/claudio/projects/expert/apps/expert/burrito_out/expert_linux_amd64"
+          local expert_cmd = "/home/claudio/.local/bin/expert"
           
           require('lspconfig').lexical.setup {
             cmd = { expert_cmd },
@@ -187,8 +187,8 @@
           })
           
           -- Keymaps
-          vim.keymap.set("n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
-          vim.keymap.set("v", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
+          vim.keymap.set("n", "<C-z>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
+          vim.keymap.set("v", "<C-z>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
           vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true })
           vim.keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true })
         '';
