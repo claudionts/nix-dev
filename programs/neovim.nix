@@ -25,6 +25,8 @@
              flow = 'json',
            },
          })
+         vim.keymap.set("n", "<space>h", ":nohlsearch<CR>")
+         vim.keymap.set("n", "<leader><space>", ":nohlsearch<CR>")
     '';
 
     plugins = with pkgs.vimPlugins; [
