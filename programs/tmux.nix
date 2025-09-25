@@ -1,7 +1,7 @@
 _: {
   programs.tmux = {
     enable = true;
-    
+
     # Basic tmux settings using native Home Manager options
     mouse = true;
     keyMode = "vi";
@@ -10,13 +10,13 @@ _: {
     escapeTime = 0;
     historyLimit = 50000;
     clock24 = true;
-    
+
     # Terminal and display settings
     terminal = "screen-256color";
-    
+
     # Window and pane settings
     aggressiveResize = true;
-    
+
     # Custom key bindings - only what can't be configured natively
     extraConfig = ''
       # Vi-style copy mode bindings with system clipboard integration
@@ -25,7 +25,7 @@ _: {
       bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -in -selection clipboard"
       bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -in -selection clipboard"
       bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -in -selection clipboard"
-      
+
       # System clipboard integration
       set -g set-clipboard on
       bind C-c run "tmux save-buffer - | xclip -i -sel clipboard"
