@@ -158,43 +158,6 @@
       }
 
       file-line
-      plenary-nvim # Required dependency for CodeCompanion
-      {
-        plugin = codecompanion-nvim;
-        type = "lua";
-        config = ''
-          require("codecompanion").setup({
-            strategies = {
-              chat = {
-                adapter = "copilot"
-              },
-              inline = {
-                adapter = "copilot"
-              }
-            },
-            display = {
-              action_palette = {
-                width = 95,
-                height = 10
-              },
-              chat = {
-                window = {
-                  layout = "vertical",
-                  width = 0.5,
-                  height = 0.8,
-                  relative = "editor"
-                }
-              }
-            }
-          })
-
-          -- Keymaps
-          vim.keymap.set("n", "<C-z>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
-          vim.keymap.set("v", "<C-z>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
-          vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true })
-          vim.keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true })
-        '';
-      }
     ];
   };
 }
