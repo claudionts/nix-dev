@@ -30,7 +30,115 @@
     '';
 
     plugins = with pkgs.vimPlugins; [
-      copilot-vim
+      # Dependências básicas que podem ser úteis
+      plenary-nvim
+      nvim-web-devicons
+      
+      # CopilotChat.nvim - Alternativa mais estável ao Avante
+      {
+        plugin = CopilotChat-nvim;
+        type = "lua";
+        config = ''
+          require("CopilotChat").setup({
+            debug = false, -- Enable debugging
+            -- See Configuration section for rest
+            window = {
+              layout = 'vertical', -- 'vertical', 'horizontal', 'float', 'replace'
+              width = 0.5, -- fractional width of parent, or absolute width in columns when > 1
+              height = 0.5, -- fractional height of parent, or absolute height in rows when > 1
+            },
+            mappings = {
+              complete = {
+                detail = 'Use @<Tab> or /<Tab> for options.',
+                insert = '<Tab>',
+              },
+              close = {
+                normal = 'q',
+                insert = '<C-c>'
+              },
+              reset = {
+                normal = '<C-r>',
+                insert = '<C-r>'
+              },
+              submit_prompt = {
+                normal = '<CR>',
+                insert = '<C-CR>'
+              },
+              accept_diff = {
+                normal = '<C-y>',
+                insert = '<C-y>'
+              },
+              yank_diff = {
+                normal = 'gy',
+              },
+              show_diff = {
+                normal = 'gd'
+              },
+              show_system_prompt = {
+                normal = 'gp'
+              },
+              show_user_selection = {
+                normal = 'gs'
+              },
+            },
+          })
+
+          -- Keymaps
+          vim.keymap.set({'n', 'v'}, '<leader>cc', function()
+            require("CopilotChat").toggle()
+          end, { desc = 'CopilotChat - Toggle' })
+          
+          vim.keymap.set({'n', 'v'}, '<leader>ce', function()
+            require("CopilotChat").ask("Explain this code", { selection = require("CopilotChat.select").visual })
+          end, { desc = 'CopilotChat - Explain code' })
+          
+          vim.keymap.set({'n', 'v'}, '<leader>cf', function()
+            require("CopilotChat").ask("Refactor this code to make it cleaner and more efficient", { 
+              selection = require("CopilotChat.select").visual 
+            })
+          end, { desc = 'CopilotChat - Refactor code' })
+          
+          vim.keymap.set({'n', 'v'}, '<leader>cr', function()
+            require("CopilotChat").ask("Review this code and suggest improvements", { 
+              selection = require("CopilotChat.select").visual 
+            })
+          end, { desc = 'CopilotChat - Review code' })
+          
+          vim.keymap.set({'n', 'v'}, '<leader>ct', function()
+            require("CopilotChat").ask("Generate tests for this code", { 
+              selection = require("CopilotChat.select").visual 
+            })
+          end, { desc = 'CopilotChat - Generate tests' })
+          
+          vim.keymap.set({'n', 'v'}, '<leader>cn', function()
+            require("CopilotChat").ask("Suggest better names for variables and functions in this code", { 
+              selection = require("CopilotChat.select").visual 
+            })
+          end, { desc = 'CopilotChat - Better naming' })
+        '';
+      }
+      
+      {
+        plugin = copilot-vim;
+        config = ''
+          " Configuração do GitHub Copilot para aceitar sugestões com Tab
+          imap <silent><script><expr> <Tab> copilot#Accept("\<Tab>")
+          let g:copilot_no_tab_map = v:true
+          
+          " Outras opções úteis
+          " Próxima sugestão: Alt + ]
+          imap <M-]> <Plug>(copilot-next)
+          " Sugestão anterior: Alt + [
+          imap <M-[> <Plug>(copilot-previous)
+          " Dispensar sugestão: Ctrl + ]
+          imap <C-]> <Plug>(copilot-dismiss)
+          
+          " Habilitar Copilot para todos os tipos de arquivo
+          let g:copilot_filetypes = {
+            \ '*': v:true,
+            \ }
+        '';
+      }
       vim-elixir
       nvim-lspconfig
       {
