@@ -27,13 +27,21 @@
          })
          vim.keymap.set("n", "<space>h", ":nohlsearch<CR>")
          vim.keymap.set("n", "<leader><space>", ":nohlsearch<CR>")
+
+         -- Copilot configuration
+         vim.g.copilot_no_tab_map = true
+
+         -- Use vim.cmd for reliable Tab mapping
+         vim.cmd([[
+           imap <silent><script><expr> <Tab> copilot#Accept("\<CR>")
+         ]])
     '';
 
     plugins = with pkgs.vimPlugins; [
       # Dependências básicas que podem ser úteis
       plenary-nvim
       nvim-web-devicons
-      
+
       # CopilotChat.nvim - Alternativa mais estável ao Avante
       {
         plugin = CopilotChat-nvim;
@@ -50,7 +58,7 @@
             mappings = {
               complete = {
                 detail = 'Use @<Tab> or /<Tab> for options.',
-                insert = '<Tab>',
+                insert = '<C-Space>',
               },
               close = {
                 normal = 'q',
@@ -87,58 +95,38 @@
           vim.keymap.set({'n', 'v'}, '<leader>cc', function()
             require("CopilotChat").toggle()
           end, { desc = 'CopilotChat - Toggle' })
-          
+
           vim.keymap.set({'n', 'v'}, '<leader>ce', function()
             require("CopilotChat").ask("Explain this code", { selection = require("CopilotChat.select").visual })
           end, { desc = 'CopilotChat - Explain code' })
-          
+
           vim.keymap.set({'n', 'v'}, '<leader>cf', function()
-            require("CopilotChat").ask("Refactor this code to make it cleaner and more efficient", { 
-              selection = require("CopilotChat.select").visual 
+            require("CopilotChat").ask("Refactor this code to make it cleaner and more efficient", {
+              selection = require("CopilotChat.select").visual
             })
           end, { desc = 'CopilotChat - Refactor code' })
-          
+
           vim.keymap.set({'n', 'v'}, '<leader>cr', function()
-            require("CopilotChat").ask("Review this code and suggest improvements", { 
-              selection = require("CopilotChat.select").visual 
+            require("CopilotChat").ask("Review this code and suggest improvements", {
+              selection = require("CopilotChat.select").visual
             })
           end, { desc = 'CopilotChat - Review code' })
-          
+
           vim.keymap.set({'n', 'v'}, '<leader>ct', function()
-            require("CopilotChat").ask("Generate tests for this code", { 
-              selection = require("CopilotChat.select").visual 
+            require("CopilotChat").ask("Generate tests for this code", {
+              selection = require("CopilotChat.select").visual
             })
           end, { desc = 'CopilotChat - Generate tests' })
-          
+
           vim.keymap.set({'n', 'v'}, '<leader>cn', function()
-            require("CopilotChat").ask("Suggest better names for variables and functions in this code", { 
-              selection = require("CopilotChat.select").visual 
+            require("CopilotChat").ask("Suggest better names for variables and functions in this code", {
+              selection = require("CopilotChat.select").visual
             })
           end, { desc = 'CopilotChat - Better naming' })
         '';
       }
-      
-      {
-        plugin = copilot-vim;
-        config = ''
-          " Configuração do GitHub Copilot para aceitar sugestões com Tab
-          imap <silent><script><expr> <Tab> copilot#Accept("\<Tab>")
-          let g:copilot_no_tab_map = v:true
-          
-          " Outras opções úteis
-          " Próxima sugestão: Alt + ]
-          imap <M-]> <Plug>(copilot-next)
-          " Sugestão anterior: Alt + [
-          imap <M-[> <Plug>(copilot-previous)
-          " Dispensar sugestão: Ctrl + ]
-          imap <C-]> <Plug>(copilot-dismiss)
-          
-          " Habilitar Copilot para todos os tipos de arquivo
-          let g:copilot_filetypes = {
-            \ '*': v:true,
-            \ }
-        '';
-      }
+
+      copilot-vim
       vim-elixir
       nvim-lspconfig
       {
