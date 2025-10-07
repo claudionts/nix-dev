@@ -33,5 +33,7 @@
     libxml2.dev
     libxslt.dev
     zlib.dev
+    nodejs
+    yarn
   ];
 }

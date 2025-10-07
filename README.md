@@ -28,6 +28,7 @@ nix run nixpkgs#home-manager -- switch --flake ~/.config/nix-dev --impure
   - Go + gopls
   - Erlang + Elixir + elixir-ls
   - ASDF for language version management
+  - Node.js and Yarn
   - Ruby, Lua, autotools
 - **Editor**: Neovim
 - **Terminal**: tmux configured
