@@ -15,6 +15,10 @@ in {
                 local o = vim.o
              local g = vim.g
 
+             -- Set leader key to space
+             vim.g.mapleader = " "
+             vim.g.maplocalleader = " "
+
              o.clipboard = "unnamedplus"
 
              o.number = true
