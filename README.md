@@ -1,48 +1,99 @@
-# 🚀 Ambiente Nix Multi-plataforma
+# 🚀 Ambiente Nix Automático# 🚀 Ambiente Nix Automático
 
-Configuração de ambiente de desenvolvimento usando Nix Flakes e Home Manager, com suporte nativo para **Linux** e **macOS** (incluindo Tahoe 26.0.1).
 
-[![CI](https://github.com/claudionts/nix-dev/actions/workflows/ci.yml/badge.svg)](https://github.com/claudionts/nix-dev/actions/workflows/ci.yml)
 
-## 🌟 Características
+Configuração completa de desenvolvimento para Linux e macOS com **instalação automática**.Configuração c---
 
-- ✅ **100% Nativo Nix** - Sem scripts de instalação externos
-- ✅ **Multi-plataforma** - Linux (x86_64) e macOS (Apple Silicon + Intel)  
-- ✅ **Apenas Home Manager** - Simples e sem complexidade desnecessária
-- ✅ **Declarativo** - Configuração completamente reproduzível
-- ✅ **Fish Shell** - Configurado nativamente com tema bobthefish
-- ✅ **Fontes** - Nerd Fonts instaladas automaticamente
 
-## 🎯 Instalação Super Simples
 
-### 📋 Pré-requisitos
-- **Nix** instalado ([Installer oficial](https://install.determinate.systems/nix))
-- **Git** para clonar o repositório
+## ⚡ Instalação**Ambiente reproduzível com Nix** ✨ta de desenvolvimento para Linux e macOS com **instalação automática**.
 
-### 🚀 Instalação
 
-```bash
-# Clone o repositório
+
+```bash## ⚡ Instalação
+
 git clone https://github.com/claudionts/nix-dev.git ~/.config/nix-dev
 
-# Entre no diretório
-cd ~/.config/nix-dev
+cd ~/.config/nix-dev```bash
 
-# Aplique a configuração (tudo nativo!)
+./apply-config.shgit clone https://github.com/claudionts/nix-dev.git ~/.config/nix-dev
+
+```cd ~/.config/nix-dev
+
 ./apply-config.sh
+
+**Pronto!** O script instala tudo: Nix, Home Manager, configurações.```
+
+
+
+## 📦 Incluso**Pronto!** O script instala tudo: Nix, Home Manager, configurações.
+
+
+
+- **Neovim** com CodeCompanion.nvim + GitHub Copilot## 📦 Incluso
+
+- **Fish Shell** com tema bobthefish
+
+- **Tmux** configurado- **Neovim** com CodeCompanion.nvim + GitHub Copilot
+
+- **Nerd Fonts** automáticas- **Fish Shell** com tema bobthefish
+
+- **Git** + configurações- **Tmux** configurado
+
+- **Nerd Fonts** automáticas
+
+## 🔄 Comandos Úteis- **Git** + configurações
+
+## 🔄 Comandos Úteis
+
+```bash
+
+# Reaplicar configuração```bash
+
+./apply-config.sh# Reaplicar configuração
+
+./apply-config.sh
+
+# Comandos do Fish
+
+update-system  # Atualiza sistema# Comandos do Fish
+
+clean-nix      # Limpa cacheupdate-system  # Atualiza sistema
+
+clean-nix      # Limpa cache
+
+# Manutenção Nix
+
+nix-collect-garbage -d    # Limpar# Manutenção Nix
+
+nix flake update          # Atualizarnix-collect-garbage -d    # Limpar
+
+```nix flake update          # Atualizar
+
 ```
 
-**É isso!** 🎉 Sem instalações manuais, sem configurações extras.
+## 🛠️ Personalizar
 
-## 📦 O que está incluído
+## 🛠️ Personalizar
 
-### 🔧 **Ferramentas de Desenvolvimento**
-| Ferramenta | Descrição |
-|------------|-----------|
-| **Neovim** | Editor com LSP, TreeSitter, CodeCompanion |
-| **Fish Shell** | Shell moderno com tema bobthefish |
-| **Tmux** | Multiplexador de terminal |
-| **Git** | Controle de versão com aliases |
+Edite os arquivos em `programs/` para ajustar:
+
+- `fish.nix` - Shell e temaEdite os arquivos em `programs/` para ajustar:
+
+- `neovim.nix` - Editor e plugins  - `fish.nix` - Shell e tema
+
+- `packages.nix` - Programas instalados- `neovim.nix` - Editor e plugins  
+
+- `git.nix` - Configurações Git- `packages.nix` - Programas instalados
+
+- `git.nix` - Configurações Git
+
+---
+
+---
+
+**Ambiente reproduzível com Nix** ✨
+**Ambiente reproduzível com Nix** ✨
 
 ### �️ **Linguagens**
 - **Elixir + Erlang** com LSP (elixir-ls)
