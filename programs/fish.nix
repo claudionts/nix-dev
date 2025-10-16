@@ -38,23 +38,13 @@
         set -g theme_display_hostname ssh
         set -g theme_display_vi no
         set -g theme_display_date no
-        set -g theme_display_cmd_duration yes
-        set -g theme_title_display_process yes
-        set -g theme_title_display_path no
-        set -g theme_title_display_user yes
-        set -g theme_title_use_abbreviated_path no
-        set -g theme_date_format "+%a %H:%M"
-        set -g theme_avoid_ambiguous_glyphs yes
+        
+        # Configuração bobthefish: DESABILITAR nova linha
+        set -g theme_newline_cursor no
+        # Configurações extras do bobthefish
         set -g theme_powerline_fonts yes
-        set -g theme_nerd_fonts yes
-        set -g theme_show_exit_status yes
-        set -g theme_display_jobs_verbose yes
+        set -g theme_nerd_fonts yes  
         set -g default_user claudio
-        set -g theme_color_scheme terminal-dark
-        set -g fish_prompt_pwd_dir_length 1
-        set -g theme_project_dir_length 1
-        set -g theme_newline_cursor yes
-        set -g theme_newline_prompt '$ '
       '';
 
       shellAliases = {
@@ -125,6 +115,32 @@
           nix-collect-garbage -d
           nix-store --optimise
           echo "✅ Cache limpo!"
+        '';
+
+        # Função para configurar fish como shell padrão no macOS
+        setup-fish-shell = ''
+          if test (uname) = "Darwin"
+              set fish_path (which fish)
+              echo "🐟 Configurando Fish como shell padrão no macOS..."
+              
+              # Verificar se fish está nos shells válidos
+              if not grep -q "$fish_path" /etc/shells
+                  echo "📝 Adicionando fish aos shells válidos..."
+                  echo "$fish_path" | sudo tee -a /etc/shells
+              end
+              
+              # Verificar shell atual
+              set current_shell (dscl . -read /Users/(whoami) UserShell | cut -d' ' -f2)
+              if test "$current_shell" != "$fish_path"
+                  echo "🔄 Configurando fish como shell padrão..."
+                  sudo chsh -s "$fish_path" (whoami)
+                  echo "✅ Fish configurado! Reinicie o terminal."
+              else
+                  echo "✅ Fish já é o shell padrão!"
+              end
+          else
+              echo "🐧 Esta função é apenas para macOS"
+          end
         '';
       };
     };
