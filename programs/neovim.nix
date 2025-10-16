@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   programs.neovim = {
     enable = true;
-    extraPackages = with pkgs; [curl];
+    extraPackages = with pkgs; [curl ripgrep fd];
     extraLuaConfig = ''
                vim.opt.number = true
 
@@ -137,8 +137,14 @@
         plugin = nvim-treesitter.withAllGrammars;
         type = "lua";
         config = ''
-               require'nvim-treesitter.configs'.setup {
-              highlight = {enable = true}
+               require('nvim-treesitter.configs').setup {
+              highlight = {
+                enable = true,
+                additional_vim_regex_highlighting = false,
+              },
+              indent = {
+                enable = true,
+              },
           }
         '';
       }
@@ -189,11 +195,22 @@
                                 }
                             }
                         })
+                        
                         local builtin = require("telescope.builtin")
-                        vim.keymap.set("n", "<leader>ff", builtin.git_files, {})
-                        vim.keymap.set('n', '<leader>fg', builtin.live_grep,
-                                       {desc = 'Telescope live grep'})
-          vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+                        
+                        -- Função para tentar git_files primeiro, com fallback para find_files
+                        local function project_files()
+                          local git_dir = vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null")
+                          if vim.v.shell_error == 0 then
+                            builtin.git_files({})
+                          else
+                            builtin.find_files({})
+                          end
+                        end
+                        
+                        vim.keymap.set("n", "<leader>ff", project_files, {desc = 'Telescope project files'})
+                        vim.keymap.set('n', '<leader>fg', builtin.live_grep, {desc = 'Telescope live grep'})
+                        vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
         '';
       }
       vimux
