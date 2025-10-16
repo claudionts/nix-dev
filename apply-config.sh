@@ -175,10 +175,12 @@ log_info ""
 if [[ "$OS" == "darwin" ]]; then
     log_info "🍎 Sistema macOS detectado:"
     log_info "   - Configuração aplicada"
-    log_warn "   - Configure fish manualmente: chsh -s \$(which fish)"
+    log_success "   - Fish será configurado automaticamente como shell padrão"
+    log_info "   - Se não funcionar, execute: setup-fish-shell"
 else
     log_info "🐧 Sistema Linux detectado:"
     log_info "   - Configuração aplicada para claudio@linux"
 fi
 log_info ""
-log_warn "🔄 IMPORTANTE: Reinicie o Ghostty para aplicar mudanças!"
+log_warn "🔄 IMPORTANTE: Feche e abra novamente o terminal/Ghostty!"
+log_info "💡 Verifique com: echo \$SHELL (deve mostrar fish)"

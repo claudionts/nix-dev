@@ -36,5 +36,26 @@
     ".hushlogin".text = ""; # Remove mensagem de login
   };
 
-
+  # Ativação automática do Fish como shell padrão no macOS
+  home.activation.setupDefaultShell = lib.mkIf pkgs.stdenv.isDarwin (
+    lib.hm.dag.entryAfter ["writeBoundary"] ''
+      fishPath="${pkgs.fish}/bin/fish"
+      
+      # Verificar se fish está nos shells válidos
+      if ! grep -Fxq "$fishPath" /etc/shells 2>/dev/null; then
+        $DRY_RUN_CMD echo "Adicionando fish aos shells válidos..."
+        $DRY_RUN_CMD echo "$fishPath" | sudo tee -a /etc/shells > /dev/null
+      fi
+      
+      # Verificar shell atual do usuário
+      currentShell=$(dscl . -read /Users/$USER UserShell 2>/dev/null | awk '{print $2}' || echo "")
+      if [[ "$currentShell" != "$fishPath" ]]; then
+        $DRY_RUN_CMD echo "Configurando fish como shell padrão..."
+        $DRY_RUN_CMD sudo dscl . -create /Users/$USER UserShell "$fishPath"
+        echo "✅ Fish configurado como shell padrão! Reinicie o terminal."
+      else
+        echo "✅ Fish já é o shell padrão."
+      fi
+    ''
+  );
 }
