@@ -8,6 +8,10 @@
                 local o = vim.o
              local g = vim.g
 
+             -- Configurar espaço como leader
+             vim.g.mapleader = " "
+             vim.g.maplocalleader = " "
+
              o.clipboard = "unnamedplus"
 
              o.number = true
