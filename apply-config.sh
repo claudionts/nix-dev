@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
 
 # Script completo para instalação e configuração do ambiente Nix
-# Instala automaticamente Nix, Home     if [[ "$OS" == "darwin" ]]; then
-        # Detectar arquitetura do Mac
-        local arch=$(uname -m)
-        if [[ "$arch" == "arm64" ]]; then
-            config_name="claudio@darwin"
-            log_info "🍎 Aplicando configuração para macOS (Apple Silicon)..."
-        else
-            config_name="claudio@darwin-intel"  
-            log_info "🍎 Aplicando configuração para macOS (Intel)..."
-        fi
-    elseger e configura flakes
+# Instala automaticamente Nix, Home Manager e configura flakes
 
 set -euo pipefail
 
@@ -137,8 +127,15 @@ fi
 apply_configuration() {
     local config_name
     if [[ "$OS" == "darwin" ]]; then
-        config_name="claudio@darwin"
-        log_info "� Aplicando configuração para macOS..."
+        # Detectar arquitetura do Mac
+        local arch=$(uname -m)
+        if [[ "$arch" == "arm64" ]]; then
+            config_name="claudio@darwin"
+            log_info "🍎 Aplicando configuração para macOS (Apple Silicon)..."
+        else
+            config_name="claudio@darwin-intel"  
+            log_info "🍎 Aplicando configuração para macOS (Intel)..."
+        fi
     else
         config_name="claudio@linux"
         log_info "🐧 Aplicando configuração para Linux..."
@@ -162,7 +159,7 @@ log_success "=== ✅ Ambiente Nix configurado com sucesso! ==="
 log_info ""
 log_success "🎉 Instalação e configuração completadas!"
 log_info "  ✅ Nix instalado e configurado"
-log_info "  ✅ Flakes habilitados"  
+log_info "  ✅ Flakes habilitados"
 log_info "  ✅ Home Manager configurado"
 log_info "  ✅ Fish shell com tema bobthefish"
 log_info "  ✅ Fontes Nerd Font instaladas"
@@ -177,12 +174,11 @@ log_info "  ./apply-config.sh"
 log_info ""
 if [[ "$OS" == "darwin" ]]; then
     log_info "🍎 Sistema macOS detectado:"
-    log_info "   - Configuração aplicada para claudio@darwin"
-    log_success "   - Fish configurado como shell padrão automaticamente!"
+    log_info "   - Configuração aplicada"
+    log_warn "   - Configure fish manualmente: chsh -s \$(which fish)"
 else
     log_info "🐧 Sistema Linux detectado:"
     log_info "   - Configuração aplicada para claudio@linux"
 fi
 log_info ""
-log_warn "🔄 IMPORTANTE: Reinicie o Ghostty para usar o Fish como padrão!"
-log_info "💡 Se ainda não funcionar, abra um novo terminal e verifique com: echo \$SHELL"
+log_warn "🔄 IMPORTANTE: Reinicie o Ghostty para aplicar mudanças!"
