@@ -167,7 +167,19 @@
           -- Configure Expert LSP for Elixir
           -- Expert is already installed at ~/projects/expert/
 
-          local expert_cmd = "/home/claudio/.local/bin/expert"
+          -- Detectar sistema operacional e definir caminho correto
+          local function get_expert_cmd()
+            local uname = vim.fn.system("uname"):gsub("%s+", "")
+            if uname == "Darwin" then
+              -- macOS
+              return "/Users/claudio/.local/bin/expert"
+            else
+              -- Linux/Ubuntu
+              return "/home/claudio/.local/bin/expert"
+            end
+          end
+
+          local expert_cmd = get_expert_cmd()
 
           require('lspconfig').lexical.setup {
             cmd = { expert_cmd },
