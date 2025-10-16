@@ -130,10 +130,10 @@
               end
               
               # Verificar shell atual
-              set current_shell (dscl . -read /Users/(whoami) UserShell | cut -d' ' -f2)
+              set current_shell (/usr/bin/dscl . -read /Users/(whoami) UserShell | cut -d' ' -f2)
               if test "$current_shell" != "$fish_path"
                   echo "🔄 Configurando fish como shell padrão..."
-                  sudo chsh -s "$fish_path" (whoami)
+                  sudo /usr/bin/dscl . -create /Users/(whoami) UserShell "$fish_path"
                   echo "✅ Fish configurado! Reinicie o terminal."
               else
                   echo "✅ Fish já é o shell padrão!"
