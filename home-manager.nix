@@ -16,10 +16,8 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    # Fontes Nerd Font (nova sintaxe)
-    nerd-fonts.fira-code
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.hack
+    # Fontes Nerd Font (sintaxe 24.05)
+    (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Hack" ]; })
     # Fontes adicionais
     fira-code
     jetbrains-mono
