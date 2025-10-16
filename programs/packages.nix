@@ -53,7 +53,7 @@ let
     # Adicione pacotes específicos do macOS aqui se necessário
     coreutils       # GNU coreutils para macOS
     findutils       # GNU findutils
-    gnu-sed         # GNU sed
+    gnused          # GNU sed (nome correto)
     gawk            # GNU awk
     gnutar          # GNU tar
     gzip            # GNU gzip
