@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: 
+
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+  isLinux = pkgs.stdenv.isLinux;
+in
+{
   programs.neovim = {
     enable = true;
     extraPackages = with pkgs; [curl];
@@ -157,7 +163,7 @@
           -- Configure Expert LSP for Elixir
           -- Expert is already installed at ~/projects/expert/
 
-          local expert_cmd = "/home/claudio/.local/bin/expert"
+          local expert_cmd = vim.fn.expand("~/.local/bin/expert")
 
           require('lspconfig').lexical.setup {
             cmd = { expert_cmd },
