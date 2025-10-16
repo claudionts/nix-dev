@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
 # Script completo para instalação e configuração do ambiente Nix
-# Instala automaticamente Nix, Home Manager e configura flakes
+# Instala automaticamente Nix, Home     if [[ "$OS" == "darwin" ]]; then
+        # Detectar arquitetura do Mac
+        local arch=$(uname -m)
+        if [[ "$arch" == "arm64" ]]; then
+            config_name="claudio@darwin"
+            log_info "🍎 Aplicando configuração para macOS (Apple Silicon)..."
+        else
+            config_name="claudio@darwin-intel"  
+            log_info "🍎 Aplicando configuração para macOS (Intel)..."
+        fi
+    elseger e configura flakes
 
 set -euo pipefail
 
@@ -67,12 +77,18 @@ enable_flakes() {
         return 0
     fi
     
-    log_info "🔧 Habilitando flakes e nix-command..."
+    log_info "🔧 Habilitando flakes e otimizações..."
     
-    # Adicionar configuração de flakes
-    echo "experimental-features = nix-command flakes" >> "$nix_conf_file"
+    # Configuração completa para acelerar builds
+    cat >> "$nix_conf_file" << EOF
+experimental-features = nix-command flakes
+substituters = https://cache.nixos.org https://nix-community.cachix.org
+trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+builders-use-substitutes = true
+max-jobs = auto
+EOF
     
-    log_success "Flakes habilitados!"
+    log_success "Flakes e otimizações habilitados!"
 }
 
 # Função para instalar Home Manager
