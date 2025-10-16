@@ -1,10 +1,11 @@
-{pkgs, lib, ...}: 
-
-let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
-in
-{
+in {
   programs.neovim = {
     enable = true;
     extraPackages = with pkgs; [curl];

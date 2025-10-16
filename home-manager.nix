@@ -1,5 +1,8 @@
-{pkgs, lib, ...}:
 {
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./home.nix
     ./programs/fish.nix
@@ -11,7 +14,7 @@
 
   # Fontes instaladas via Home Manager
   fonts.fontconfig.enable = true;
-  
+
   home.packages = with pkgs; [
     # Fontes Nerd Font (nova sintaxe)
     nerd-fonts.fira-code

@@ -1,16 +1,20 @@
-{pkgs, lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   programs = {
     fish = {
       enable = true;
-      
+
       # Fish como shell padrão (Home Manager cuida disso)
       # Não precisa de chsh manual
-      
+
       interactiveShellInit = ''
         # Remove greeting padrão
         set -U fish_greeting ""
         set -U EDITOR nvim
-        
+
         # Configurações do tema bobthefish
         set -g theme_color_scheme dracula
         set -g theme_display_git yes
@@ -52,7 +56,7 @@
         set -g theme_newline_cursor yes
         set -g theme_newline_prompt '$ '
       '';
-      
+
       shellAliases = {
         # Git aliases
         g = "git";
@@ -63,13 +67,13 @@
         gck = "git checkout";
         gl = "git log";
         gp = "git push";
-        
+
         # Nix aliases
         hm = "home-manager";
         hms = "home-manager switch --flake ~/.config/nix-dev";
         hmsl = "home-manager switch --flake ~/.config/nix-dev#claudio@linux";
         hmsd = "home-manager switch --flake ~/.config/nix-dev#claudio@darwin";
-        
+
         # Utility aliases
         ll = "eza -la";
         la = "eza -la";
@@ -78,7 +82,7 @@
         grep = "rg";
         find = "fd";
       };
-      
+
       # Plugins nativos do Fish (sem Fisher)
       plugins = [
         {
@@ -100,7 +104,7 @@
           };
         }
       ];
-      
+
       functions = {
         # Função para atualizar sistema
         update-system = ''
@@ -114,7 +118,7 @@
           end
           echo "✅ Sistema atualizado!"
         '';
-        
+
         # Função para limpar cache
         clean-nix = ''
           echo "🧹 Limpando cache do Nix..."
@@ -124,7 +128,7 @@
         '';
       };
     };
-    
+
     # Starship prompt (alternativa ao bobthefish se preferir)
     starship = {
       enable = false; # Desabilitado porque estamos usando bobthefish
