@@ -18,7 +18,7 @@
     fd
     tmux
     gcc
-    asdf-vm
+    # asdf-vm removido - será instalado via Git para funcionar corretamente
     gopls
     go
     luajitPackages.luarocks

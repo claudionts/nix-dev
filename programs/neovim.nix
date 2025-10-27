@@ -184,9 +184,9 @@
           
           -- Verificar se o Expert existe
           if vim.fn.executable(expert_cmd) == 1 then
-            require('lspconfig').expert.setup {
+            require('lspconfig').lexical.setup {
               cmd = { expert_cmd },
-              name = 'expert',
+              name = 'lexical',
               root_dir = function(fname)
                 return require('lspconfig').util.root_pattern("mix.exs", ".git")(fname) or vim.fn.getcwd()
               end,

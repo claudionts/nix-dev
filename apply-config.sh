@@ -123,6 +123,74 @@ else
     log_info "✅ Home Manager já está disponível"
 fi
 
+# Função para configurar asdf
+setup_asdf() {
+    log_info "🐟 Configurando asdf para Elixir/Erlang..."
+    
+    # Verificar se asdf já está instalado corretamente
+    if [[ -f "$HOME/.asdf/asdf.fish" ]] && command -v asdf &> /dev/null; then
+        log_info "✅ asdf já está configurado"
+        
+        # Verificar se Elixir/Erlang estão instalados
+        if asdf list elixir 2>/dev/null | grep -q "1.17.3-otp-27" && asdf list erlang-prebuilt-macos 2>/dev/null | grep -q "27.1.2"; then
+            log_info "✅ Elixir e Erlang já estão instalados via asdf"
+            return 0
+        fi
+    fi
+    
+    log_info "📦 Instalando/configurando asdf..."
+    
+    # Remover asdf antigo se existir
+    if [[ -d "$HOME/.asdf" ]]; then
+        log_info "🗑️  Removendo instalação anterior do asdf..."
+        rm -rf "$HOME/.asdf"
+    fi
+    
+    # Instalar asdf via Git
+    log_info "📥 Instalando asdf via Git..."
+    git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf" --branch v0.14.0
+    
+    # Verificar se a instalação foi bem-sucedida
+    if [[ ! -f "$HOME/.asdf/asdf.fish" ]]; then
+        log_error "❌ Erro: asdf não foi instalado corretamente"
+        return 1
+    fi
+    
+    # Carregar asdf no shell atual
+    source "$HOME/.asdf/asdf.fish"
+    
+    # Instalar plugins necessários
+    log_info "🔌 Instalando plugins do asdf..."
+    
+    # Plugin do Erlang pré-compilado para macOS
+    if [[ "$OS" == "darwin" ]]; then
+        asdf plugin add erlang-prebuilt-macos https://github.com/michallepicki/asdf-erlang-prebuilt-macos.git 2>/dev/null || true
+    else
+        asdf plugin add erlang 2>/dev/null || true
+    fi
+    
+    # Plugin do Elixir
+    asdf plugin add elixir 2>/dev/null || true
+    
+    # Instalar versões
+    log_info "📦 Instalando Erlang e Elixir..."
+    
+    if [[ "$OS" == "darwin" ]]; then
+        # macOS: usar Erlang pré-compilado
+        asdf install erlang-prebuilt-macos 27.1.2
+        asdf global erlang-prebuilt-macos 27.1.2
+    else
+        # Linux: usar Erlang compilado
+        asdf install erlang 27.1.2
+        asdf global erlang 27.1.2
+    fi
+    
+    asdf install elixir 1.17.3-otp-27
+    asdf global elixir 1.17.3-otp-27
+    
+    log_success "✅ asdf configurado com Elixir/Erlang!"
+}
+
 # Aplicar configurações
 apply_configuration() {
     local config_name
@@ -155,6 +223,9 @@ apply_configuration() {
 log_info "🚀 Iniciando aplicação da configuração..."
 apply_configuration
 
+# Configurar asdf após aplicar as configurações
+setup_asdf
+
 log_success "=== ✅ Ambiente Nix configurado com sucesso! ==="
 log_info ""
 log_success "🎉 Instalação e configuração completadas!"
@@ -164,10 +235,16 @@ log_info "  ✅ Home Manager configurado"
 log_info "  ✅ Fish shell com tema bobthefish"
 log_info "  ✅ Fontes Nerd Font instaladas"
 log_info "  ✅ Neovim com CodeCompanion"
+log_info "  ✅ asdf configurado com Elixir/Erlang"
 log_info ""
 log_info "💡 Comandos úteis no Fish:"
 log_info "  update-system  # Atualiza configuração"
 log_info "  clean-nix      # Limpa cache do Nix"
+log_info ""
+log_info "🧪 Comandos Elixir/Erlang:"
+log_info "  elixir --version  # Verificar versão do Elixir"
+log_info "  asdf list elixir  # Listar versões instaladas"
+log_info "  asdf list erlang-prebuilt-macos  # (macOS) ou 'asdf list erlang' (Linux)"
 log_info ""
 log_info "🔧 Para reaplicar a configuração:"
 log_info "  ./apply-config.sh"
