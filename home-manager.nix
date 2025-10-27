@@ -26,7 +26,7 @@
   ];
 
   home.sessionVariables = {
-    PATH = "$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH";
+    PATH = "/opt/homebrew/opt/docker/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH";
     SHELL = "${pkgs.fish}/bin/fish";
   };
 

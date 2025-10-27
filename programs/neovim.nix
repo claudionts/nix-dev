@@ -165,7 +165,8 @@
         type = "lua";
         config = ''
           -- Configure Expert LSP for Elixir
-          -- Expert is already installed at ~/projects/expert/
+          -- Expert is already installed at ~/.local/bin/expert
+          -- Use asdf Elixir/Erlang instead of Nix versions
 
           -- Detectar sistema operacional e definir caminho correto
           local function get_expert_cmd()
@@ -180,15 +181,39 @@
           end
 
           local expert_cmd = get_expert_cmd()
-
-          require('lspconfig').lexical.setup {
-            cmd = { expert_cmd },
-            root_dir = function(fname)
-              return require('lspconfig').util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
-            end,
-            filetypes = { "elixir", "eelixir", "heex" },
-            settings = {}
-          }
+          
+          -- Verificar se o Expert existe
+          if vim.fn.executable(expert_cmd) == 1 then
+            require('lspconfig').expert.setup {
+              cmd = { expert_cmd },
+              name = 'expert',
+              root_dir = function(fname)
+                return require('lspconfig').util.root_pattern("mix.exs", ".git")(fname) or vim.fn.getcwd()
+              end,
+              filetypes = { "elixir", "eelixir", "heex" },
+              settings = {},
+              -- Configurar para usar asdf
+              on_init = function(client)
+                -- Garantir que usa o PATH com asdf
+                local asdf_home = os.getenv("HOME") .. "/.asdf"
+                if vim.fn.isdirectory(asdf_home) == 1 then
+                  local asdf_shims = asdf_home .. "/shims"
+                  local current_path = os.getenv("PATH") or ""
+                  if not string.find(current_path, asdf_shims, 1, true) then
+                    vim.env.PATH = asdf_shims .. ":" .. current_path
+                  end
+                end
+              end,
+              capabilities = require('cmp_nvim_lsp').default_capabilities(),
+            }
+          else
+            -- Fallback para Elixir LS se Expert não estiver disponível
+            require('lspconfig').elixirls.setup {
+              cmd = { "elixir-ls" },
+              capabilities = require('cmp_nvim_lsp').default_capabilities(),
+            }
+          end
+          end
         '';
       }
       vim-projectionist

@@ -10,4 +10,10 @@ _: {
     Categories=Network;InstantMessaging;
     StartupNotify=true
   '';
+
+  # Configurações de ambiente específicas do asdf (sem PATH)
+  home.sessionVariables = {
+    ASDF_DIR = "$HOME/.asdf";
+    ASDF_DATA_DIR = "$HOME/.asdf";
+  };
 }

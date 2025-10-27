@@ -14,6 +14,16 @@
         # Remove greeting padrão
         set -U fish_greeting ""
         set -U EDITOR nvim
+        
+        # Priorizar asdf no PATH - executar ANTES de outras configurações
+        if test -f ~/.asdf/asdf.fish
+            source ~/.asdf/asdf.fish
+            # Garantir que os shims do asdf tenham prioridade no PATH
+            set -gx PATH ~/.asdf/shims $PATH
+        end
+        
+        # Adicionar Docker ao PATH (instalado via Homebrew)
+        set -gx PATH /opt/homebrew/opt/docker/bin $PATH
 
         # Configurações do tema bobthefish
         set -g theme_color_scheme dracula
@@ -60,9 +70,13 @@
 
         # Nix aliases
         hm = "home-manager";
-        hms = "home-manager switch --flake ~/.config/nix-dev";
+        # Alias que detecta automaticamente a plataforma
+        hms = "if test (uname) = 'Darwin'; home-manager switch --flake ~/.config/nix-dev#claudio@darwin; else; home-manager switch --flake ~/.config/nix-dev#claudio@linux; end";
+        # Aliases específicos por plataforma
         hmsl = "home-manager switch --flake ~/.config/nix-dev#claudio@linux";
         hmsd = "home-manager switch --flake ~/.config/nix-dev#claudio@darwin";
+        # Alias para aplicar configuração via script
+        apply-config = "cd ~/.config/nix-dev && ./apply-config.sh";
 
         # Utility aliases
         ll = "eza -la";
