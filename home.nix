@@ -2,7 +2,7 @@ _: {
   home = {
     file = {
       ".local/share/icons/teams.png".source = ./icons/teams.png;
-      
+
       ".local/share/applications/teams.desktop".text = ''
         [Desktop Entry]
         Name=Microsoft Teams
