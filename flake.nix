@@ -46,7 +46,7 @@
             targets.genericLinux.enable = true;
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
-              (final: prev: {
+              (_final: _prev: {
                 inherit (pkgs-unstable-linux) neovim-unwrapped;
               })
             ];
@@ -68,7 +68,7 @@
             };
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
-              (final: prev: {
+              (_final: _prev: {
                 inherit (pkgs-unstable-darwin-arm) neovim-unwrapped;
               })
             ];
@@ -90,7 +90,7 @@
             };
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
-              (final: prev: {
+              (_final: _prev: {
                 inherit (pkgs-unstable-darwin-intel) neovim-unwrapped;
               })
             ];
@@ -113,7 +113,7 @@
             targets.genericLinux.enable = true;
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
-              (final: prev: {
+              (_final: _prev: {
                 inherit (pkgs-unstable-linux) neovim-unwrapped;
               })
             ];
