@@ -128,11 +128,20 @@ setup_asdf() {
     log_info "🐟 Configurando asdf para Elixir/Erlang..."
     
     # Verificar se asdf já está instalado corretamente
-    if [[ -f "$HOME/.asdf/asdf.fish" ]] && command -v asdf &> /dev/null; then
+    if [[ -f "$HOME/.asdf/asdf.sh" ]] && [[ -f "$HOME/.asdf/asdf.fish" ]]; then
         log_info "✅ asdf já está configurado"
         
         # Verificar se Elixir/Erlang estão instalados
-        if asdf list elixir 2>/dev/null | grep -q "1.17.3-otp-27" && asdf list erlang-prebuilt-macos 2>/dev/null | grep -q "27.1.2"; then
+        local erlang_check=""
+        if [[ "$OS" == "darwin" ]]; then
+            erlang_check=$(asdf list erlang-prebuilt-macos 2>/dev/null | grep -q "27.1.2" && echo "found" || echo "not_found")
+        else
+            erlang_check=$(asdf list erlang 2>/dev/null | grep -q "27.1.2" && echo "found" || echo "not_found")
+        fi
+        
+        local elixir_check=$(asdf list elixir 2>/dev/null | grep -q "1.17.3-otp-27" && echo "found" || echo "not_found")
+        
+        if [[ "$erlang_check" == "found" ]] && [[ "$elixir_check" == "found" ]]; then
             log_info "✅ Elixir e Erlang já estão instalados via asdf"
             return 0
         fi
@@ -151,13 +160,13 @@ setup_asdf() {
     git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf" --branch v0.14.0
     
     # Verificar se a instalação foi bem-sucedida
-    if [[ ! -f "$HOME/.asdf/asdf.fish" ]]; then
+    if [[ ! -f "$HOME/.asdf/asdf.sh" ]] || [[ ! -f "$HOME/.asdf/asdf.fish" ]]; then
         log_error "❌ Erro: asdf não foi instalado corretamente"
         return 1
     fi
     
-    # Carregar asdf no shell atual
-    source "$HOME/.asdf/asdf.fish"
+    # Carregar asdf no shell atual (usar versão bash)
+    source "$HOME/.asdf/asdf.sh"
     
     # Instalar plugins necessários
     log_info "🔌 Instalando plugins do asdf..."

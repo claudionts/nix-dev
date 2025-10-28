@@ -165,8 +165,7 @@
         type = "lua";
         config = ''
           -- Configure Expert LSP for Elixir
-          -- Expert is already installed at ~/.local/bin/expert
-          -- Use asdf Elixir/Erlang instead of Nix versions
+          -- Expert is already installed at ~/projects/expert/
 
           -- Detectar sistema operacional e definir caminho correto
           local function get_expert_cmd()
@@ -181,39 +180,15 @@
           end
 
           local expert_cmd = get_expert_cmd()
-          
-          -- Verificar se o Expert existe
-          if vim.fn.executable(expert_cmd) == 1 then
-            require('lspconfig').lexical.setup {
-              cmd = { expert_cmd },
-              name = 'lexical',
-              root_dir = function(fname)
-                return require('lspconfig').util.root_pattern("mix.exs", ".git")(fname) or vim.fn.getcwd()
-              end,
-              filetypes = { "elixir", "eelixir", "heex" },
-              settings = {},
-              -- Configurar para usar asdf
-              on_init = function(client)
-                -- Garantir que usa o PATH com asdf
-                local asdf_home = os.getenv("HOME") .. "/.asdf"
-                if vim.fn.isdirectory(asdf_home) == 1 then
-                  local asdf_shims = asdf_home .. "/shims"
-                  local current_path = os.getenv("PATH") or ""
-                  if not string.find(current_path, asdf_shims, 1, true) then
-                    vim.env.PATH = asdf_shims .. ":" .. current_path
-                  end
-                end
-              end,
-              capabilities = require('cmp_nvim_lsp').default_capabilities(),
-            }
-          else
-            -- Fallback para Elixir LS se Expert não estiver disponível
-            require('lspconfig').elixirls.setup {
-              cmd = { "elixir-ls" },
-              capabilities = require('cmp_nvim_lsp').default_capabilities(),
-            }
-          end
-          end
+
+          require('lspconfig').lexical.setup {
+            cmd = { expert_cmd },
+            root_dir = function(fname)
+              return require('lspconfig').util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+            end,
+            filetypes = { "elixir", "eelixir", "heex" },
+            settings = {}
+          }
         '';
       }
       vim-projectionist
@@ -222,32 +197,32 @@
         plugin = telescope-nvim;
         type = "lua";
         config = ''
-                     local telescope = require("telescope")
-                        telescope.setup({
-                            defaults = {
-                                vimgrep_arguments = {
-                                    "rg", "--color=never", "--no-heading", "--with-filename",
-                                    "--line-number", "--column", "--smart-case", "--hidden",
-                                    "--glob=!.git"
-                                }
-                            }
-                        })
-                        
-                        local builtin = require("telescope.builtin")
-                        
-                        -- Função para tentar git_files primeiro, com fallback para find_files
-                        local function project_files()
-                          local git_dir = vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null")
-                          if vim.v.shell_error == 0 then
-                            builtin.git_files({})
-                          else
-                            builtin.find_files({})
-                          end
-                        end
-                        
-                        vim.keymap.set("n", "<leader>ff", project_files, {desc = 'Telescope project files'})
-                        vim.keymap.set('n', '<leader>fg', builtin.live_grep, {desc = 'Telescope live grep'})
-                        vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+          local telescope = require("telescope")
+             telescope.setup({
+                 defaults = {
+                     vimgrep_arguments = {
+                         "rg", "--color=never", "--no-heading", "--with-filename",
+                         "--line-number", "--column", "--smart-case", "--hidden",
+                         "--glob=!.git"
+                     }
+                 }
+             })
+
+             local builtin = require("telescope.builtin")
+
+             -- Função para tentar git_files primeiro, com fallback para find_files
+             local function project_files()
+               local git_dir = vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null")
+               if vim.v.shell_error == 0 then
+                 builtin.git_files({})
+               else
+                 builtin.find_files({})
+               end
+             end
+
+             vim.keymap.set("n", "<leader>ff", project_files, {desc = 'Telescope project files'})
+             vim.keymap.set('n', '<leader>fg', builtin.live_grep, {desc = 'Telescope live grep'})
+             vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
         '';
       }
       vimux

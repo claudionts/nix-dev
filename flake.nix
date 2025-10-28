@@ -24,7 +24,7 @@
     pkgs-linux = nixpkgs.legacyPackages.${system-linux};
     pkgs-darwin-arm = nixpkgs.legacyPackages.${system-darwin-arm};
     pkgs-darwin-intel = nixpkgs.legacyPackages.${system-darwin-intel};
-    
+
     # Pacotes unstable (para Neovim)
     pkgs-unstable-linux = nixpkgs-unstable.legacyPackages.${system-linux};
     pkgs-unstable-darwin-arm = nixpkgs-unstable.legacyPackages.${system-darwin-arm};

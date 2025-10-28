@@ -17,7 +17,7 @@
 
   home.packages = with pkgs; [
     # Fontes Nerd Font (sintaxe 24.05)
-    (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Hack" ]; })
+    (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Hack"];})
     # Fontes adicionais
     fira-code
     jetbrains-mono
@@ -40,13 +40,13 @@
   home.activation.setupDefaultShell = lib.mkIf pkgs.stdenv.isDarwin (
     lib.hm.dag.entryAfter ["writeBoundary"] ''
       fishPath="${pkgs.fish}/bin/fish"
-      
+
       # Verificar se fish está nos shells válidos
       if ! grep -Fxq "$fishPath" /etc/shells 2>/dev/null; then
         $DRY_RUN_CMD echo "Adicionando fish aos shells válidos..."
         $DRY_RUN_CMD echo "$fishPath" | ${pkgs.coreutils}/bin/tee -a /etc/shells > /dev/null
       fi
-      
+
       # Verificar shell atual do usuário usando cut em vez de awk
       currentShell=$(/usr/bin/dscl . -read /Users/$USER UserShell 2>/dev/null | ${pkgs.coreutils}/bin/cut -d' ' -f2 || echo "")
       if [[ "$currentShell" != "$fishPath" ]]; then

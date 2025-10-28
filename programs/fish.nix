@@ -14,14 +14,14 @@
         # Remove greeting padrão
         set -U fish_greeting ""
         set -U EDITOR nvim
-        
+
         # Priorizar asdf no PATH - executar ANTES de outras configurações
         if test -f ~/.asdf/asdf.fish
             source ~/.asdf/asdf.fish
             # Garantir que os shims do asdf tenham prioridade no PATH
             set -gx PATH ~/.asdf/shims $PATH
         end
-        
+
         # Adicionar Docker ao PATH (instalado via Homebrew)
         set -gx PATH /opt/homebrew/opt/docker/bin $PATH
 
@@ -48,12 +48,12 @@
         set -g theme_display_hostname ssh
         set -g theme_display_vi no
         set -g theme_display_date no
-        
+
         # Configuração bobthefish: DESABILITAR nova linha
         set -g theme_newline_cursor no
         # Configurações extras do bobthefish
         set -g theme_powerline_fonts yes
-        set -g theme_nerd_fonts yes  
+        set -g theme_nerd_fonts yes
         set -g default_user claudio
       '';
 
@@ -70,8 +70,6 @@
 
         # Nix aliases
         hm = "home-manager";
-        # Alias que detecta automaticamente a plataforma
-        hms = "if test (uname) = 'Darwin'; home-manager switch --flake ~/.config/nix-dev#claudio@darwin; else; home-manager switch --flake ~/.config/nix-dev#claudio@linux; end";
         # Aliases específicos por plataforma
         hmsl = "home-manager switch --flake ~/.config/nix-dev#claudio@linux";
         hmsd = "home-manager switch --flake ~/.config/nix-dev#claudio@darwin";
@@ -110,6 +108,15 @@
       ];
 
       functions = {
+        # Função para home-manager switch automático
+        hms = ''
+          if test (uname) = "Darwin"
+              home-manager switch --flake ~/.config/nix-dev#claudio@darwin
+          else
+              home-manager switch --flake ~/.config/nix-dev#claudio@linux
+          end
+        '';
+
         # Função para atualizar sistema
         update-system = ''
           if test (uname) = "Darwin"
@@ -136,13 +143,13 @@
           if test (uname) = "Darwin"
               set fish_path (which fish)
               echo "🐟 Configurando Fish como shell padrão no macOS..."
-              
+
               # Verificar se fish está nos shells válidos
               if not grep -q "$fish_path" /etc/shells
                   echo "📝 Adicionando fish aos shells válidos..."
                   echo "$fish_path" | sudo tee -a /etc/shells
               end
-              
+
               # Verificar shell atual
               set current_shell (/usr/bin/dscl . -read /Users/(whoami) UserShell | cut -d' ' -f2)
               if test "$current_shell" != "$fish_path"
