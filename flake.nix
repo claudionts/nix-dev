@@ -47,7 +47,7 @@
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
               (final: prev: {
-                neovim-unwrapped = pkgs-unstable-linux.neovim-unwrapped;
+                inherit (pkgs-unstable-linux) neovim-unwrapped;
               })
             ];
           }
@@ -69,7 +69,7 @@
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
               (final: prev: {
-                neovim-unwrapped = pkgs-unstable-darwin-arm.neovim-unwrapped;
+                inherit (pkgs-unstable-darwin-arm) neovim-unwrapped;
               })
             ];
           }
@@ -91,7 +91,7 @@
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
               (final: prev: {
-                neovim-unwrapped = pkgs-unstable-darwin-intel.neovim-unwrapped;
+                inherit (pkgs-unstable-darwin-intel) neovim-unwrapped;
               })
             ];
           }
@@ -114,7 +114,7 @@
             # Overlay para Neovim unstable
             nixpkgs.overlays = [
               (final: prev: {
-                neovim-unwrapped = pkgs-unstable-linux.neovim-unwrapped;
+                inherit (pkgs-unstable-linux) neovim-unwrapped;
               })
             ];
           }

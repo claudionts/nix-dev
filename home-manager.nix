@@ -15,25 +15,27 @@
   # Fontes instaladas via Home Manager
   fonts.fontconfig.enable = true;
 
-  home.packages = with pkgs; [
-    # Fontes Nerd Font (sintaxe 24.05)
-    (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Hack"];})
-    # Fontes adicionais
-    fira-code
-    jetbrains-mono
-    noto-fonts
-    noto-fonts-emoji
-  ];
+  home = {
+    packages = with pkgs; [
+      # Fontes Nerd Font (sintaxe 24.05)
+      (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Hack"];})
+      # Fontes adicionais
+      fira-code
+      jetbrains-mono
+      noto-fonts
+      noto-fonts-emoji
+    ];
 
-  home.sessionVariables = {
-    PATH = "/opt/homebrew/opt/docker/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH";
-    SHELL = "${pkgs.fish}/bin/fish";
-  };
+    sessionVariables = {
+      PATH = "/opt/homebrew/opt/docker/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH";
+      SHELL = "${pkgs.fish}/bin/fish";
+    };
 
-  # Configurações básicas
-  home.file = {
-    # Arquivos de configuração comuns
-    ".hushlogin".text = ""; # Remove mensagem de login
+    # Configurações básicas
+    file = {
+      # Arquivos de configuração comuns
+      ".hushlogin".text = ""; # Remove mensagem de login
+    };
   };
 
   # Ativação automática do Fish como shell padrão no macOS

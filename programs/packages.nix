@@ -3,8 +3,7 @@
   lib,
   ...
 }: let
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
+  inherit (pkgs.stdenv) isDarwin isLinux;
 
   # Pacotes comuns para ambas as plataformas
   commonPackages = with pkgs; [
