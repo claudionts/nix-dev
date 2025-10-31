@@ -46,6 +46,27 @@
       plenary-nvim
       nvim-web-devicons
 
+      # NerdTree - Explorador de arquivos
+      {
+        plugin = nerdtree;
+        config = ''
+          " NerdTree configuration
+          let g:NERDTreeShowHidden=1
+          let g:NERDTreeMinimalUI=1
+          let g:NERDTreeIgnore=['\.git$', '\.DS_Store$']
+          let g:NERDTreeWinSize=30
+          
+          " Mapear Ctrl+b para abrir/fechar o NerdTree
+          nnoremap <C-b> :NERDTreeToggle<CR>
+          
+          " Abrir NerdTree no diretório do arquivo atual
+          nnoremap <leader>nf :NERDTreeFind<CR>
+          
+          " Fechar automaticamente se NerdTree for a única janela restante
+          autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+        '';
+      }
+
       # CopilotChat.nvim - Alternativa mais estável ao Avante
       {
         plugin = CopilotChat-nvim;
