@@ -55,13 +55,13 @@
           let g:NERDTreeMinimalUI=1
           let g:NERDTreeIgnore=['\.git$', '\.DS_Store$']
           let g:NERDTreeWinSize=30
-          
+
           " Mapear Ctrl+b para abrir/fechar o NerdTree
           nnoremap <C-b> :NERDTreeToggle<CR>
-          
+
           " Abrir NerdTree no diretório do arquivo atual
           nnoremap <leader>nf :NERDTreeFind<CR>
-          
+
           " Fechar automaticamente se NerdTree for a única janela restante
           autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         '';
