@@ -14,9 +14,8 @@ _: {
       '';
     };
 
-    # Configurações de ambiente específicas do asdf (sem PATH)
+    # Dados/plugins do asdf no home; ASDF_DIR vem do pacote Nix (fish shellInit)
     sessionVariables = {
-      ASDF_DIR = "$HOME/.asdf";
       ASDF_DATA_DIR = "$HOME/.asdf";
     };
   };

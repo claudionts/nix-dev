@@ -17,6 +17,8 @@
 
   home = {
     packages = with pkgs; [
+      # CLI no PATH (alias `hm` e comandos documentados)
+      home-manager
       # Fontes Nerd Font (sintaxe 24.05)
       (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Hack"];})
       # Fontes adicionais
@@ -38,25 +40,17 @@
     };
   };
 
-  # Ativação automática do Fish como shell padrão no macOS
-  home.activation.setupDefaultShell = lib.mkIf pkgs.stdenv.isDarwin (
+  # Fish como shell de login exige root (/etc/shells + dscl). O Home Manager corre
+  # como utilizador normal — não tentar aqui (evita "tee: Permission denied").
+  # No Fish: setup-fish-shell  (usa sudo quando necessário)
+  home.activation.macosFishLoginHint = lib.mkIf pkgs.stdenv.isDarwin (
     lib.hm.dag.entryAfter ["writeBoundary"] ''
       fishPath="${pkgs.fish}/bin/fish"
-
-      # Verificar se fish está nos shells válidos
-      if ! grep -Fxq "$fishPath" /etc/shells 2>/dev/null; then
-        $DRY_RUN_CMD echo "Adicionando fish aos shells válidos..."
-        $DRY_RUN_CMD echo "$fishPath" | ${pkgs.coreutils}/bin/tee -a /etc/shells > /dev/null
-      fi
-
-      # Verificar shell atual do usuário usando cut em vez de awk
-      currentShell=$(/usr/bin/dscl . -read /Users/$USER UserShell 2>/dev/null | ${pkgs.coreutils}/bin/cut -d' ' -f2 || echo "")
-      if [[ "$currentShell" != "$fishPath" ]]; then
-        $DRY_RUN_CMD echo "Configurando fish como shell padrão..."
-        $DRY_RUN_CMD /usr/bin/dscl . -create /Users/$USER UserShell "$fishPath"
-        echo "✅ Fish configurado como shell padrão! Reinicie o terminal."
-      else
-        echo "✅ Fish já é o shell padrão."
+      currentShell=$(/usr/bin/dscl . -read "/Users/$USER" UserShell 2>/dev/null | ${pkgs.coreutils}/bin/cut -d' ' -f2 || echo "")
+      if ! grep -Fxq "$fishPath" /etc/shells 2>/dev/null || [[ "$currentShell" != "$fishPath" ]]; then
+        printf '\n%s\n' "Home Manager: Ghostty já pode usar fish via command = ~/.nix-profile/bin/fish."
+        printf '%s\n' "Para tornar fish o shell de login do utilizador (opcional), no Fish executa: setup-fish-shell"
+        printf '%s\n\n' "(pede sudo para /etc/shells e UserShell.)"
       fi
     ''
   );

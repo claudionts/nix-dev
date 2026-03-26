@@ -123,51 +123,35 @@ else
     log_info "✅ Home Manager já está disponível"
 fi
 
-# Função para configurar asdf
+# Função para configurar asdf (binário vem do Nix via Home Manager; dados em ~/.asdf)
 setup_asdf() {
-    log_info "🐟 Configurando asdf para Elixir/Erlang..."
-    
-    # Verificar se asdf já está instalado corretamente
-    if [[ -f "$HOME/.asdf/asdf.sh" ]] && [[ -f "$HOME/.asdf/asdf.fish" ]]; then
-        log_info "✅ asdf já está configurado"
-        
-        # Verificar se Elixir/Erlang estão instalados
-        local erlang_check=""
-        if [[ "$OS" == "darwin" ]]; then
-            erlang_check=$(asdf list erlang-prebuilt-macos 2>/dev/null | grep -q "27.1.2" && echo "found" || echo "not_found")
-        else
-            erlang_check=$(asdf list erlang 2>/dev/null | grep -q "27.1.2" && echo "found" || echo "not_found")
-        fi
-        
-        local elixir_check=$(asdf list elixir 2>/dev/null | grep -q "1.17.3-otp-27" && echo "found" || echo "not_found")
-        
-        if [[ "$erlang_check" == "found" ]] && [[ "$elixir_check" == "found" ]]; then
-            log_info "✅ Elixir e Erlang já estão instalados via asdf"
-            return 0
-        fi
-    fi
-    
-    log_info "📦 Instalando/configurando asdf..."
-    
-    # Remover asdf antigo se existir
-    if [[ -d "$HOME/.asdf" ]]; then
-        log_info "🗑️  Removendo instalação anterior do asdf..."
-        rm -rf "$HOME/.asdf"
-    fi
-    
-    # Instalar asdf via Git
-    log_info "📥 Instalando asdf via Git..."
-    git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf" --branch v0.14.0
-    
-    # Verificar se a instalação foi bem-sucedida
-    if [[ ! -f "$HOME/.asdf/asdf.sh" ]] || [[ ! -f "$HOME/.asdf/asdf.fish" ]]; then
-        log_error "❌ Erro: asdf não foi instalado corretamente"
+    log_info "🐟 Configurando plugins Elixir/Erlang no asdf..."
+
+    export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+    export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
+    mkdir -p "$ASDF_DATA_DIR"
+
+    if ! command -v asdf &> /dev/null; then
+        log_error "Comando asdf não encontrado após home-manager switch."
+        log_warn "Confirme que o flake inclui asdf-vm em home.packages, rode de novo e abra um novo terminal."
         return 1
     fi
-    
-    # Carregar asdf no shell atual (usar versão bash)
-    source "$HOME/.asdf/asdf.sh"
-    
+
+    # Idempotência: já tem Elixir + Erlang nas versões desejadas
+    local have_erlang=0 have_elixir=0
+    if [[ "$OS" == "darwin" ]]; then
+        asdf list erlang-prebuilt-macos 2>/dev/null | grep -q '27.1.2' && have_erlang=1
+    else
+        asdf list erlang 2>/dev/null | grep -q '27.1.2' && have_erlang=1
+    fi
+    asdf list elixir 2>/dev/null | grep -q '1.17.3-otp-27' && have_elixir=1
+    if [[ "$have_erlang" -eq 1 && "$have_elixir" -eq 1 ]]; then
+        log_info "✅ Elixir e Erlang já estão instalados via asdf"
+        return 0
+    fi
+
+    log_info "📦 Instalando plugins e runtimes asdf (dados em \$ASDF_DATA_DIR)..."
+
     # Instalar plugins necessários
     log_info "🔌 Instalando plugins do asdf..."
     

@@ -6,17 +6,23 @@
       # Fish como shell padrão (Home Manager cuida disso)
       # Não precisa de chsh manual
 
+      # shellInit: roda em todo Fish (incl. fish -c e terminais GUI como Ghostty),
+      # para asdf e shims estarem no PATH fora só do modo interativo.
+      shellInit = ''
+        set -q ASDF_DATA_DIR; or set -gx ASDF_DATA_DIR $HOME/.asdf
+        if test -f ${pkgs.asdf-vm}/share/asdf-vm/asdf.fish
+          set -gx ASDF_DIR ${pkgs.asdf-vm}/share/asdf-vm
+          source ${pkgs.asdf-vm}/share/asdf-vm/asdf.fish
+        else if test -f $HOME/.asdf/asdf.fish
+          set -gx ASDF_DIR $HOME/.asdf
+          source $HOME/.asdf/asdf.fish
+        end
+      '';
+
       interactiveShellInit = ''
         # Remove greeting padrão
         set -U fish_greeting ""
         set -U EDITOR nvim
-
-        # Priorizar asdf no PATH - executar ANTES de outras configurações
-        if test -f ~/.asdf/asdf.fish
-            source ~/.asdf/asdf.fish
-            # Garantir que os shims do asdf tenham prioridade no PATH
-            set -gx PATH ~/.asdf/shims $PATH
-        end
 
         # Adicionar Docker ao PATH (instalado via Homebrew)
         set -gx PATH /opt/homebrew/opt/docker/bin $PATH
