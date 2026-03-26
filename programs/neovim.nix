@@ -31,14 +31,6 @@
          })
          vim.keymap.set("n", "<space>h", ":nohlsearch<CR>")
          vim.keymap.set("n", "<leader><space>", ":nohlsearch<CR>")
-
-         -- Copilot configuration
-         vim.g.copilot_no_tab_map = true
-
-         -- Use vim.cmd for reliable Tab mapping
-         vim.cmd([[
-           imap <silent><script><expr> <Tab> copilot#Accept("\<CR>")
-         ]])
     '';
 
     plugins = with pkgs.vimPlugins; [
@@ -66,96 +58,50 @@
           autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         '';
       }
-
-      # CopilotChat.nvim - Alternativa mais estável ao Avante
-      {
-        plugin = CopilotChat-nvim;
-        type = "lua";
-        config = ''
-          require("CopilotChat").setup({
-            debug = false, -- Enable debugging
-            -- See Configuration section for rest
-            window = {
-              layout = 'vertical', -- 'vertical', 'horizontal', 'float', 'replace'
-              width = 0.5, -- fractional width of parent, or absolute width in columns when > 1
-              height = 0.5, -- fractional height of parent, or absolute height in rows when > 1
-            },
-            mappings = {
-              complete = {
-                detail = 'Use @<Tab> or /<Tab> for options.',
-                insert = '<C-Space>',
-              },
-              close = {
-                normal = 'q',
-                insert = '<C-c>'
-              },
-              reset = {
-                normal = '<C-r>',
-                insert = '<C-r>'
-              },
-              submit_prompt = {
-                normal = '<CR>',
-                insert = '<C-CR>'
-              },
-              accept_diff = {
-                normal = '<C-y>',
-                insert = '<C-y>'
-              },
-              yank_diff = {
-                normal = 'gy',
-              },
-              show_diff = {
-                normal = 'gd'
-              },
-              show_system_prompt = {
-                normal = 'gp'
-              },
-              show_user_selection = {
-                normal = 'gs'
-              },
-            },
-          })
-
-          -- Keymaps
-          vim.keymap.set({'n', 'v'}, '<leader>cc', function()
-            require("CopilotChat").toggle()
-          end, { desc = 'CopilotChat - Toggle' })
-
-          vim.keymap.set({'n', 'v'}, '<leader>ce', function()
-            require("CopilotChat").ask("Explain this code", { selection = require("CopilotChat.select").visual })
-          end, { desc = 'CopilotChat - Explain code' })
-
-          vim.keymap.set({'n', 'v'}, '<leader>cf', function()
-            require("CopilotChat").ask("Refactor this code to make it cleaner and more efficient", {
-              selection = require("CopilotChat.select").visual
-            })
-          end, { desc = 'CopilotChat - Refactor code' })
-
-          vim.keymap.set({'n', 'v'}, '<leader>cr', function()
-            require("CopilotChat").ask("Review this code and suggest improvements", {
-              selection = require("CopilotChat.select").visual
-            })
-          end, { desc = 'CopilotChat - Review code' })
-
-          vim.keymap.set({'n', 'v'}, '<leader>ct', function()
-            require("CopilotChat").ask("Generate tests for this code", {
-              selection = require("CopilotChat.select").visual
-            })
-          end, { desc = 'CopilotChat - Generate tests' })
-
-          vim.keymap.set({'n', 'v'}, '<leader>cn', function()
-            require("CopilotChat").ask("Suggest better names for variables and functions in this code", {
-              selection = require("CopilotChat.select").visual
-            })
-          end, { desc = 'CopilotChat - Better naming' })
-        '';
-      }
-
-      copilot-vim
       vim-elixir
       nvim-lspconfig
+      nvim-spectre
       {
-        plugin = nvim-treesitter.withAllGrammars;
+        plugin = nvim-treesitter.withPlugins (p: [
+          # Linguagens principais
+          p.elixir
+          p.heex
+          p.eex
+          p.python
+          p.bash
+          p.lua
+          p.nix
+          # Web development
+          p.javascript
+          p.typescript
+          p.tsx
+          p.html
+          p.css
+          p.scss
+          # Configuração e dados
+          p.json
+          p.jsonc
+          p.yaml
+          p.toml
+          p.xml
+          # Git
+          p.gitignore
+          p.git_config
+          p.git_rebase
+          p.gitcommit
+          p.gitattributes
+          p.diff
+          # Docker e DevOps
+          p.dockerfile
+          # Documentação
+          p.markdown
+          p.markdown_inline
+          p.vim
+          p.vimdoc
+          # Outros úteis
+          p.regex
+          p.comment
+        ]);
         type = "lua";
         config = ''
                require('nvim-treesitter.configs').setup {
