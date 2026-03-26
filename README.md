@@ -1,304 +1,94 @@
-# 🚀 Ambiente Nix Automático# 🚀 Ambiente Nix Automático
+# nix-dev
 
+Configuração [Home Manager](https://github.com/nix-community/home-manager) com Nix Flakes para macOS e Linux (utilizador `claudio`). Ferramentas declarativas: Fish, Neovim, Tmux, Git, pacotes em `programs/packages.nix`, etc.
 
+## Requisitos
 
-Configuração completa de desenvolvimento para Linux e macOS com **instalação automática**.Configuração c---
+- [Nix](https://nixos.org/) com **flakes** e **nix-command** (ex.: `experimental-features = nix-command flakes` em `~/.config/nix/nix.conf` ou `/etc/nix/nix.conf`).
 
-
-
-## ⚡ Instalação**Ambiente reproduzível com Nix** ✨ta de desenvolvimento para Linux e macOS com **instalação automática**.
-
-
-
-```bash## ⚡ Instalação
-
-git clone https://github.com/claudionts/nix-dev.git ~/.config/nix-dev
-
-cd ~/.config/nix-dev```bash
-
-./apply-config.shgit clone https://github.com/claudionts/nix-dev.git ~/.config/nix-dev
-
-```cd ~/.config/nix-dev
-
-./apply-config.sh
-
-**Pronto!** O script instala tudo: Nix, Home Manager, configurações.```
-
-
-
-## 📦 Incluso**Pronto!** O script instala tudo: Nix, Home Manager, configurações.
-
-
-
-- **Neovim** com CodeCompanion.nvim + GitHub Copilot## 📦 Incluso
-
-- **Fish Shell** com tema bobthefish
-
-- **Tmux** configurado- **Neovim** com CodeCompanion.nvim + GitHub Copilot
-
-- **Nerd Fonts** automáticas- **Fish Shell** com tema bobthefish
-
-- **Git** + configurações- **Tmux** configurado
-
-- **Nerd Fonts** automáticas
-
-## 🔄 Comandos Úteis- **Git** + configurações
-
-## 🔄 Comandos Úteis
+## Clonar
 
 ```bash
-
-# Reaplicar configuração```bash
-
-./apply-config.sh# Reaplicar configuração
-
-./apply-config.sh
-
-# Comandos do Fish
-
-update-system  # Atualiza sistema# Comandos do Fish
-
-clean-nix      # Limpa cacheupdate-system  # Atualiza sistema
-
-clean-nix      # Limpa cache
-
-# Manutenção Nix
-
-nix-collect-garbage -d    # Limpar# Manutenção Nix
-
-nix flake update          # Atualizarnix-collect-garbage -d    # Limpar
-
-```nix flake update          # Atualizar
-
+git clone https://github.com/claudionts/nix-dev.git ~/.config/nix-dev
+cd ~/.config/nix-dev
 ```
 
-## 🛠️ Personalizar
+Ajusta `flake.nix` e `home-manager.nix` se o teu utilizador ou `homeDirectory` forem outros.
 
-## 🛠️ Personalizar
+## Aplicar a configuração
 
-Edite os arquivos em `programs/` para ajustar:
+**Opção A — script (instala Nix/Home Manager se faltar, depois faz switch):**
 
-- `fish.nix` - Shell e temaEdite os arquivos em `programs/` para ajustar:
+```bash
+./apply.sh
+# equivalente: ./apply-config.sh
+```
 
-- `neovim.nix` - Editor e plugins  - `fish.nix` - Shell e tema
+**Opção B — só Home Manager** (recomendado se o Nix já está OK):
 
-- `packages.nix` - Programas instalados- `neovim.nix` - Editor e plugins  
+```bash
+cd ~/.config/nix-dev
+home-manager switch --flake ".#<nome>"
+```
 
-- `git.nix` - Configurações Git- `packages.nix` - Programas instalados
+Substitui `<nome>` conforme a máquina:
 
-- `git.nix` - Configurações Git
+| Sistema        | Nome no flake        |
+|----------------|----------------------|
+| macOS Apple Silicon | `claudio@darwin`  |
+| macOS Intel       | `claudio@darwin-intel` |
+| Linux             | `claudio@linux`   |
 
----
+**Primeira vez sem `home-manager` no PATH** (Fish/bash ainda não o encontram):
 
----
+```bash
+cd ~/.config/nix-dev
+nix run github:nix-community/home-manager/release-24.05 -- switch --flake ".#claudio@darwin"
+```
 
-**Ambiente reproduzível com Nix** ✨
-**Ambiente reproduzível com Nix** ✨
+(Usa `claudio@darwin-intel` ou `claudio@linux` conforme o caso.)
 
-### �️ **Linguagens**
-- **Elixir + Erlang** com LSP (elixir-ls)
-- **Go** com gopls
-- **Node.js + Yarn**
-- **Ruby, Lua** 
-- **ASDF** para gerenciamento de versões
+Depois de um switch bem-sucedido, abre **um terminal novo**. O pacote `home-manager` fica em `~/.nix-profile/bin` e o alias `hm` no Fish funciona.
 
-### 📱 **CLI Tools**
-- **bat** (substitui cat)
-- **eza** (substitui ls) 
-- **fzf** (fuzzy finder)
-- **ripgrep** (substitui grep)
-- **fd** (substitui find)
-- **lazygit** (interface Git)
-- **starship** (prompt)
+## Fish e shell de login (macOS)
 
-### 🔤 **Fontes Nativas**
-- **FiraCode Nerd Font**
-- **JetBrains Mono**
-- **Noto Fonts + Emoji**
+- O Home Manager **não** altera `/etc/shells` nem `UserShell` sozinho (exige `sudo`).
+- Para definir Fish como shell de login: no Fish, `setup-fish-shell`.
+- No **Ghostty** (ou outro terminal) podes apontar diretamente para `~/.nix-profile/bin/fish` sem mudar o shell de login do sistema.
 
-## 🔧 Estrutura do Projeto
+## Estrutura
 
 ```
 nix-dev/
-├── 📄 flake.nix              # Configuração multi-plataforma
-├── 🏠 home-manager.nix       # Base do Home Manager + Fontes  
-├── 🏡 home.nix              # Configurações de usuário
-├── 🚀 apply-config.sh        # Script simples de aplicação
-├── 🛠️ dev.sh                # Script de desenvolvimento
-└── 📁 programs/             # Configurações por programa
-    ├── 🐟 fish.nix          # Fish nativo + bobthefish
-    ├── 📝 git.nix           # Git + aliases
-    ├── ✏️  neovim.nix        # Neovim completo
-    ├── 📦 packages.nix      # Pacotes por plataforma
-    └── 🪟 tmux.nix          # Tmux configurado
+├── flake.nix           # Inputs e homeConfigurations
+├── home-manager.nix    # Pacotes base, PATH, fontes
+├── home.nix            # Ficheiros e variáveis de sessão
+├── apply-config.sh     # Instalação + switch + asdf (plugins/runtimes)
+├── apply.sh            # Chama apply-config.sh
+├── dev.sh              # format, build, apply, check (desenvolvimento)
+└── programs/           # fish, git, neovim, packages, tmux
 ```
 
-## 🔄 Comandos Úteis
+## Personalizar
 
-### 🎨 **Comandos Nativos do Fish**
-```bash
-update-system  # Atualiza todo o sistema
-clean-nix      # Limpa cache do Nix
-```
+Edita ficheiros em `programs/` (por exemplo `packages.nix`, `fish.nix`) e volta a correr `home-manager switch` ou `./apply.sh`.
 
-### 📱 **Comandos por Plataforma**
-```bash
-# Linux
-home-manager switch --flake ~/.config/nix-dev#claudio@linux
-
-# macOS  
-home-manager switch --flake ~/.config/nix-dev#claudio@darwin
-
-# Ou simplesmente
-./apply-config.sh  # Detecta automaticamente a plataforma
-```
-
-### 🧹 **Manutenção**
-```bash
-nix-collect-garbage -d          # Limpar cache
-nix-store --optimise           # Otimizar store
-nix flake update               # Atualizar inputs
-```
-
-## 🛠️ **Script de Desenvolvimento**
-
-O `dev.sh` oferece comandos para desenvolvimento:
+## Manutenção
 
 ```bash
-./dev.sh check    # Verificar flake
-./dev.sh build    # Construir configuração
-./dev.sh apply    # Aplicar configuração
-./dev.sh format   # Formatar código Nix
-./dev.sh update   # Atualizar dependências
-./dev.sh clean    # Limpar cache
-./dev.sh test     # Executar testes
-./dev.sh ci       # Simular ambiente CI
+nix flake update              # atualizar inputs do flake
+nix-collect-garbage -d        # libertar espaço na store
+home-manager generations      # listar gerações
 ```
 
-## 🌊 **Configurações Específicas**
+## Avisos do Nix (substituters / trusted user)
 
-### 🍎 **macOS**
-- **GNU Coreutils** para compatibilidade
-- **Terminal Notifier** para notificações
-- **Fontes Nerd Font** otimizadas
-- **Pacotes específicos** do macOS
+Se aparecerem avisos sobre `trusted-public-keys` ou substituters ignorados, o daemon Nix só aplica isso a utilizadores listados em `trusted-users` em `/etc/nix/nix.conf` (macOS: requer admin). Os avisos não impedem builds normais com a cache pública padrão.
 
-### 🐧 **Linux**
-- **XClip** para clipboard no X11
-- **Teams for Linux** nativo
-- **Headers de desenvolvimento** (libxml2, libxslt, zlib)
-- **Configurações específicas** para ambiente Linux
-
-### 🤝 **Ambas Plataformas**
-- **Home Manager puro** - sem complexidade extra
-- **Fish shell** com tema bobthefish
-- **Mesmas ferramentas** e configurações
-
-## 💡 **Por que 100% Nativo?**
-
-### ✅ **Vantagens:**
-- **Reproduzível** - Funciona igual em qualquer máquina
-- **Declarativo** - Toda configuração em código
-- **Rollback** - Desfaz mudanças automaticamente
-- **Gestão automática** - Dependências resolvidas pelo Nix
-- **Sem scripts** - Tudo gerenciado pelo sistema
-- **Multi-plataforma** - Mesmo código, diferentes sistemas
-
-### 🚫 **Sem mais:**
-- ❌ Scripts de instalação manuais
-- ❌ Comandos `curl | bash`
-- ❌ Configurações imperativas
-- ❌ Dependências quebradas
-- ❌ Estados inconsistentes
-
-## 🆘 **Troubleshooting**
-
-### **Nix não encontrado:**
-```bash
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-```
-
-### **Flakes não habilitados:**
-```bash
-echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
-```
-
-### **Logs detalhados:**
-```bash
-./apply-config.sh 2>&1 | tee install.log
-```
-
-## 🤝 **Contribuição**
-
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -am 'Adiciona feature'`)
-4. Push (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
-
----
-
-**🎉 Desenvolvido com ❤️  usando Nix Flakes**
-
-*Configuração 100% nativa - Zero instalações manuais* ✨
-
-## 🔄 Continuous Integration
-
-The project uses GitHub Actions for:
-
-- ✅ Check flake validity
-- 🏗️ Test configuration build
-- 🎨 Check code formatting
-- 🧪 Test on multiple NixOS versions
-- 📦 Automatically update dependencies (Renovate)
-
-## 📂 Project Structure
-
-```
-.
-├── flake.nix              # Main flake configuration
-├── home-manager.nix       # Imports and global configurations
-├── home.nix              # User-specific files
-├── programs/             # Configurations per tool
-│   ├── fish.nix          # Fish shell
-│   ├── git.nix           # Git
-│   ├── tmux.nix          # Terminal multiplexer
-│   └── packages.nix      # Package list
-├── .github/              # CI/CD
-│   └── workflows/
-│       └── ci.yml        # GitHub Actions
-└── dev.sh               # Development helper script
-```
-
-## 🔧 Customization
-
-1. **Add new packages**: Edit `programs/packages.nix`
-2. **Configure tools**: Add files in `programs/`
-3. **Modify user**: Adjust `flake.nix` and `home-manager.nix`
-
-## 🐛 Troubleshooting
+## Desenvolvimento local
 
 ```bash
-# Check flake issues
-nix flake check --show-trace
-
-# Clean cache in case of problems
-nix-collect-garbage -d
-
-# Check detailed logs
-./dev.sh ci
-```
-
-## 📋 Useful Commands
-
-```bash
-# Update only a specific input
-nix flake lock --update-input nixpkgs
-
-# See what changed
-nix store diff-closures /nix/var/nix/profiles/per-user/$USER/home-manager*
-
-# Rollback to previous generation
-home-manager generations
-home-manager switch --switch-generation <ID>
+./dev.sh format   # Alejandra
+./dev.sh check    # formatação + flake check + build
+./dev.sh apply    # switch via nix run nixpkgs#home-manager (ajusta o flake se precisares de outro output)
 ```
